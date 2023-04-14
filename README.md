@@ -50,118 +50,19 @@ Set-InitialEnvironment -Location "WestEurope"
 It will create resource for you to be able to work with:
 
 1. Resource group with name and tags (you can change values in [parameters](bicep/rg.parameters.json) file)
-2. Log Analytics workspace with per gb sku (you can change values in [parameters](bicep/log-analytics.parameters.json) file)
-3. Application Insights assigned to Log Analytics workspace (you can change values in [parameters](bicep/application-insights.parameters.json) file)
-4. Azure Registry to store containers and images (you can change values in [parameters](bicep/registry.parameters.json) file)
+2. Storage account to store blob storage and to be able to be set as diagnostics source ((you can change values in [parameters](bicep/storage.parameters.json) file))
+3. Log Analytics workspace with per gb sku (you can change values in [parameters](bicep/log-analytics.parameters.json) file)
+4. Application Insights assigned to Log Analytics workspace (you can change values in [parameters](bicep/application-insights.parameters.json) file)
+5. Virtual Machine with tools deployed and application with SQL installed (you can change values in [parameters](bicep/vm.parameters.json) file)
+5. Azure Registry to store containers and images (you can change values in [parameters](bicep/registry.parameters.json) file)
+6. Azure Kubernetes Service with connection to Azure Container Registry (you can change values in [parameters](bicep/aks.parameters.json) file)
+
+To connect to the cluster, follow this [instructions](https://learn.microsoft.com/en-us/azure/aks/learn/quick-kubernetes-deploy-bicep?tabs=azure-powershell%2CCLI#connect-to-the-cluster).
+
 
 ## Demos
 
-Demo is about simple issue tracking system (ITS) for managing work tasks. Stats about the system are on front page and
-are refreshed daily.
 
-Demo site enables you to add your work tasks and track their progress - you can specify online resources which are
-associated with links. You can add register into the system, add tasks, comment on tasks, collaborate and more. You can
-download list of tasks in PDF format and can associate online resources with tasks,which will get downloaded and stored
-in PDF for offline viewing and will generate reports with attached resources.
-
-![Demo solution structure](https://webeudatastorage.blob.core.windows.net/web/conf-24-solution-demo.png)
-
-### Data folder
-
-Data folder contains libraries to work with the database and external services like Azure Storage.
-
-![Structure of libraries to work with data](https://webeudatastorage.blob.core.windows.net/web/conf-24-solution-data.png)
-
-1. **ITS.Interfaces** - contains interfaces for data access and external services
-2. **ITS.Models** - contains POCO objects to map the data from database
-3. **ITS.SQL** - interface implementation for SQL database
-4. **ITS.Storage** - interface implementation for local file storage - to save data to local file
-5. **ITS.Storage.Azure** - interface implementation for Azure Storage - to save data to Azure Storage
-6. **ITS.Storage.Dapr** - interface implementation for [Dapr](https://dapr.io) - to save data to Dapr components
-
-You can replace the implementation of the interface (to use for example Azure Storage instead of local file system) in
-**Program.cs** file inside projects.
-
-### Generators folder
-
-Generators folder contains command line tools to generate data for the system.
-
-1. **ITS.File.Stats.Generator** - generates stats for the system and stores it to the database
-2. **ITS.SQL.Generator** - generates database for the system and populates it with bogus data
-   with [Bogus library](https://github.com/bchavez/Bogus).
-
-![SQL data generator](https://webeudatastorage.blob.core.windows.net/web/conf24-sql-generator.gif)
-
-You will need to provide env variables or follow procedure on the screen for ITS.File.Stats.Generator to work:
-
-1. **SQL_CONNECTION_STRING** - connection string to the SQL database
-2. **FILEPATH** - path to the file where to store the data
-
-For the ITS.SQL.Generator you will need to provide env variables or follow procedure on the screen:
-
-1. **FOLDER_ROOT** - path to the folder where to store the data - if you don't provide it, it will download from github
-   and then extract it, run the code and do the job
-2. **DROP_DATABASE** - true/false - if you want to drop the database before generating new one
-3. **CREATE_TABLES** - true/false - if you want to create tables before generating new data
-4. **DEFAULT_PASSWORD** - password for the users
-5. **RECORD_NUMBER** - number of records to generate
-
-### UI folder
-
-UI folder contains web application to work with the tickets, API to provide REST services to get back the result and
-background service to calculate statistics for the tasks on a daily basis.
-
-#### ITS.Web - web application to work with the tickets
-
-![web app](https://webeudatastorage.blob.core.windows.net/web/conf-24-solution-web.png)
-
-In program.cs file you can change the implementation of the interface to use different storage for the data and
-configure the app settings.
-
-Those settings are stored in **appsettings.json** file and you can use env to override them:
-
-1. **SqlOptions__ConnectionString** - connection string to the database
-2. **AuthOptions__ApiKey** - API key which will match when doing an api call from client to server. Check
-   out [ApiKeyAuthFilter.cs](\src\ITS\ITS.Web.ReportApi\Authentication\ApiKeyAuthFilter.cs) for more details.
-3. **AuthOptions__HashSalt** - salt for hashing the ID to have youtube like routes (instead of ID). Check out hashids
-   library [here](https://hashids.org/).
-4. **AzureStorageOptions__ConnectionString** - connection string to the Azure Storage account
-5. **AzureStorageOptions__ContainerName** - name of the container in the Azure Storage account
-6. **AzureStorageOptions__BlobName** - name of the blob in the Azure Storage account (which will holds the file with
-   stats information)
-7. **ApiOptions__ReportApiUrl** - URL to the ReportApi (for example https://localhost:5001/)
-
-To run it, navigate to the [folder](\src\ITS\ITS.Web\) and run (example below with one environment variable):
-
-```powershell
-Set-Item Env:AuthOptions__ApiKey "12345678"
-dotnet run 
-```
-
-It uses forms authentication which can be replaced with something else (for
-example [Azure AAD Auth](https://learn.microsoft.com/en-us/azure/active-directory/develop/howto-create-service-principal-portal)
-or B2C) respectively.
-
-#### ITS.Web.ReportApi - API to provide REST services to get back the result
-
-It has only one [endpoint](\src\ITS\ITS.Web.ReportApi\Controllers\TaskApiReportsController.cs) to get back the stats
-information from the database and generate PDF files with the data.
-
-![API rest](https://webeudatastorage.blob.core.windows.net/web/conf-24-solution-api.png)
-
-Those settings are stored in **appsettings.json** file and you can use env to override them:
-
-1. **SqlOptions__ConnectionString** - connection string to the database
-2. **AuthOptions__ApiKey** - API key which will match when doing an api call from client to server. Check
-   out [ApiKeyAuthFilter.cs](\src\ITS\ITS.Web.ReportApi\Authentication\ApiKeyAuthFilter.cs) for more details.
-3. **AuthOptions__HashSalt** - salt for hashing the ID to have youtube like routes (instead of ID). Check out hashids
-   library [here](https://hashids.org/).
-4. **AzureStorageOptions__ConnectionString** - connection string to the Azure Storage account
-5. **AzureStorageOptions__ContainerName** - name of the container in the Azure Storage account
-6. **AzureStorageOptions__BlobName** - name of the blob in the Azure Storage account (which will holds the file with
-   stats information)
-
-To run it, navigate to the [folder](\src\ITS\ITS.Web.ReportApi\) and run (example below with one environment variable):
 
 ```powershell
 Set-Item Env:AuthOptions__ApiKey "12345678"

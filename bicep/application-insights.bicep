@@ -12,7 +12,6 @@ param appInsightName string = 'ai-${uniqueString(resourceGroup().id)}'
 @description('Resource Id of the log analytics workspace which the data will be ingested to.')
 param logAnalyticsId string
 
-
 param resourceTags object = {
   Description: 'Log analytics for monitoring basics demo'
    Environment: 'Demo'

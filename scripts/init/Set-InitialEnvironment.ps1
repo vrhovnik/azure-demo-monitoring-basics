@@ -68,6 +68,8 @@ Write-Verbose "The resource group name is $groupName"
 
 # deploy log analytics file if not already deployed
 New-AzResourceGroupDeployment -ResourceGroupName $groupName -TemplateFile "bicep\log-analytics.bicep" -TemplateParameterFile "bicep\log-analytics.parameters.json" -Verbose
+# deploy azure storage file if not already deployed
+New-AzResourceGroupDeployment -ResourceGroupName $groupName -TemplateFile "bicep\storage.bicep" -TemplateParameterFile "bicep\storage.parameters.json" -Verbose
 # deploy azure registry file if not already deployed
 New-AzResourceGroupDeployment -ResourceGroupName $groupName -TemplateFile "bicep\registry.bicep" -TemplateParameterFile "bicep\registry.parameters.json" -Verbose
 # deploy azure sql if not already deployed
