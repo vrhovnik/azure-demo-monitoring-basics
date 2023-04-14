@@ -1,0 +1,54 @@
+﻿@page  "{pageNumber=1}/{query?}"
+@model IndexPageModel
+
+@{
+    ViewData["Title"] = "Task search engine";
+}
+
+@if (string.IsNullOrEmpty(Model.Message))
+{
+    <p class="text-warning">@Model.Message</p>
+}
+<div class="container">
+    @if (User.Identity.IsAuthenticated)
+    {
+        <div class="float-end mb-2 mt-2">
+            <a asp-page="/Tasks/Create"
+               class="btn btn-success">
+                Create new task <i class="fas fa-plus"></i>
+            </a>
+        </div>
+    }
+    <div class="float-end mb-2 mt-2 m-2">
+        <a href="@Model.ReportApiPublicTasks" target="_blank" class="btn btn-success">
+            Download PDF <i class="fa-solid fa-file-pdf"></i>
+        </a>
+    </div>
+</div>
+<div class="container">
+    <input aria-label="search term"
+           asp-for="Query"
+           autocomplete="off"
+           class="form-control"
+           hx-get
+           hx-swap="outerHtml"
+           hx-target="#grid"
+           hx-trigger="keyup changed delay:300ms"
+           placeholder="enter search term"
+           type="text">
+</div>
+<div class="container mt-2">
+    @if (!string.IsNullOrEmpty(Model.MostActiveTask))
+        {
+            <div class="alert alert-info">
+                <h4 class="alert-heading">Most active task</h4>
+                <p>@Model.MostActiveTask</p>
+            </div>
+        }
+    @await Html.PartialAsync("_WorkTasksList", Model.WorkTasks)
+</div>
+
+@section Scripts
+{
+    <script src="https://unpkg.com/htmx.org@1.6.0"></script>
+}

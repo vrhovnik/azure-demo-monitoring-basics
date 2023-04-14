@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+    <PropertyGroup>
+        <TargetFramework>net6.0</TargetFramework>
+        <Nullable>enable</Nullable>
+        <ImplicitUsings>enable</ImplicitUsings>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Hashids.net" Version="1.6.1" />
+        <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
+        <PackageReference Include="QuestPDF" Version="2022.12.1" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\ITS.Core\ITS.Core.csproj" />
+      <ProjectReference Include="..\ITS.Interfaces\ITS.Interfaces.csproj" />
+      <ProjectReference Include="..\ITS.SQL\ITS.SQL.csproj" />
+      <ProjectReference Include="..\ITS.Storage.Azure\ITS.Storage.Azure.csproj" />
+      <ProjectReference Include="..\ITS.Storage.Dapr\ITS.Storage.Dapr.csproj" />
+      <ProjectReference Include="..\ITS.Storage\ITS.Storage.csproj" />
+    </ItemGroup>
+
+</Project>

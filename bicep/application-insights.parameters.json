@@ -1,0 +1,15 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "appInsightName": {
+      "value": "ai-monitoring"
+    },
+    "logAnalyticsId": {
+      "value": "e5813867-278d-4f08-a524-58272c2c5ea9"
+    },
+    "location": {
+      "value": "WestEurope"
+    }
+  }
+}
