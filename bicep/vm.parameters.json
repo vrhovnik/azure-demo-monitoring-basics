@@ -2,17 +2,20 @@
   "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
   "contentVersion": "1.0.0.0",
   "parameters": {
-    "agentCount": {
-      "value": 2
+    "vmName": {
+      "value": "vm-monitoring-2022"
     },
-    "aksClusterName":{
-      "value":"aks-monitoring-basics"
+    "publicIpAddressName": {
+      "value": "vm-monitoring-public-access-2022"
     },
-    "osType": {
-      "value": "Linux"
+    "dnsNameForIp": {
+      "value": "vm-monitoring-web"
     },
-    "agentVMSize": {
-      "value": "Standard_B2ms"
+    "windowsAdminUsername": {
+      "value": "bojanv"
+    },
+    "windowsAdminPassword": {
+      "value": "St$rW4rsRules1!"
     },
     "location": {
       "value": "WestEurope"

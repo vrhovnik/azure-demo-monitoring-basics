@@ -209,9 +209,9 @@ resource vmBootstrap 'Microsoft.Compute/virtualMachines/extensions@2022-03-01' =
     autoUpgradeMinorVersion: true
     protectedSettings: {
       fileUris: [
-        'https://raw.githubusercontent.com/ttaubert/azure-quickstart-templates/master/101-vm-monitoring/Install-Tools.ps1'  
+        'https://raw.githubusercontent.com/vrhovnik/azure-demo-monitoring-basics/main/scripts/sw/Install-Tools.ps1'  
       ]
-      commandToExecute: 'powershell.exe -ExecutionPolicy Unrestricted -File Install-Tools.ps1 -scriptPath "Install-Tools.ps1"'
+      commandToExecute: 'powershell.exe -ExecutionPolicy Unrestricted -File Install-Tools.ps1 -scriptPath "https://raw.githubusercontent.com/vrhovnik/azure-demo-monitoring-basics/main/scripts/sw/Install-Tools.ps1"'
     }
   }
 }

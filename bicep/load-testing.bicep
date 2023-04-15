@@ -1,4 +1,4 @@
-﻿@description('Specifies the name of the log analytics workspace.')
+﻿@description('Specifies the name of the load testing resource.')
 param loadTestingName string = 'alt-${uniqueString(resourceGroup().id)}'
 
 @description('Specifies the location for all resources.')

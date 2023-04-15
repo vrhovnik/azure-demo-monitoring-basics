@@ -11,6 +11,9 @@
     "osType": {
       "value": "Linux"
     },
+    "agentVMSize": {
+      "value": "Standard_B2ms"
+    },
     "location": {
       "value": "WestEurope"
     }
