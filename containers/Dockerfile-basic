@@ -1,0 +1,19 @@
+﻿FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
+WORKDIR /src
+
+COPY ["MonitoringSLN/Monitoring.Basic/", "Monitoring.Basic/"]
+RUN dotnet restore "Monitoring.Basic/Monitoring.Basic.csproj"
+
+COPY . .
+
+WORKDIR "/src/"
+
+RUN dotnet build "Monitoring.Basic/Monitoring.Basic.csproj" -c Release -o /app
+
+FROM build AS publish
+RUN dotnet publish "Monitoring.Basic/Monitoring.Basic.csproj" -c Release -o /app
+
+FROM mcr.microsoft.com/dotnet/aspnet:6.0 as final
+WORKDIR /app
+COPY --from=publish /app .
+ENTRYPOINT ["dotnet", "Monitoring.Basic.dll"]

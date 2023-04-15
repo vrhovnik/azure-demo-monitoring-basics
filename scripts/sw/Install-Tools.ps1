@@ -1,6 +1,6 @@
 <# 
 # SYNOPSIS
-# PowerShell script to setup web application to be installed on VM
+# PowerShell script to setup web app and other tools to be installed on VM
 #
 # DESCRIPTION
 # installs all neccessary file to be installed on VM with getting back address to be able to access it
@@ -8,7 +8,7 @@
 # NOTES
 # Author      : Bojan Vrhovnik
 # GitHub      : https://github.com/vrhovnik
-# Version 0.2.5
+# Version 0.2.6
 # SHORT CHANGE DESCRIPTION: added transcript to be able to see installation log, if anything wrong
 #>
 
@@ -43,7 +43,6 @@ $args.Add("/IACCEPTSQLSERVERLICENSETERMS")
 Write-Host "Installing SQL Express silently..."
 Start-Process -FilePath "$PWD\sqlsetup.exe" -ArgumentList $args -NoNewWindow -Wait -PassThru
 
-
 # installing chocolatey to install additional services 
 Write-Host "Installing chocolatey"
 
@@ -63,7 +62,7 @@ Write-Host "Installing PowerShell AZ module"
 choco install -y az.powershell -Force
 
 Write-Host "Installing Sysinternals ZoomIt"
-choco install -y choco install sysinternals
+choco install -y sysinternals
 
 # enable IIS
 Write-Host "Continue with enabling IIS on the machine"
@@ -105,58 +104,16 @@ Invoke-WebRequest -Uri $zipPath -OutFile "$HOME\amaw.zip"
 #extract to amaw folder
 Expand-Archive -Path "$HOME\amaw.zip" -DestinationPath "$HOME\amaw" -Force
 
-Write-Host "Changed location to $HOME/amaw/azure-demo-monitoring-basics-main/src/ITS/ITS.Web"
-Set-Location "$HOME/amaw/azure-demo-monitoring-basics-main/src/ITS/ITS.Web"
+Write-Host "Changed location to $HOME/amaw/azure-demo-monitoring-basics-main/src/MonitoringSLN/Monitoring.Basic"
+Set-Location "$HOME/amaw/azure-demo-monitoring-basics-main/src/MonitoringSLN/Monitoring.Basic"
 
 $rootPath = "C:\Inetpub\wwwroot\"
 Write-Host "Creating Folder Web and publishing solution Web to wwwroot"
 mkdir "$rootPath\Web"
 dotnet publish --configuration Release -o "$rootPath\Web"
 
-Write-Host "DotNet publish for Web done, doing same for API"
-Write-Host "Changed location to $HOME/amaw/src/ITS/ITS.Web.ClientAPI"
-Set-Location "$HOME/amaw/azure-monitor-automation-wth-main/src/TTASLN/TTA.Web.ReportApi"
-
-Write-Host "Creating Folder WebClient and publishing solution Client to wwwroot"
-New-Item -ItemType Directory "$rootPath\WebClient"
-dotnet publish --configuration Release -o "$rootPath\WebClient"
-
-Write-Host "Create web applications directories in IIS - ttaweb and ttawebclient"
+Write-Host "Create web applications directories in IIS - web"
 New-WebApplication -Site "Default Web Site" -Name "web" -PhysicalPath "C:\Inetpub\wwwroot\Web" -ApplicationPool "DefaultAppPool"
-New-WebApplication -Site "Default Web Site" -Name "report" -PhysicalPath "C:\Inetpub\wwwroot\WebClient" -ApplicationPool "DefaultAppPool"
-
-#compile SQL generator to generate data and databases
-Set-Location "$HOME/amaw/azure-monitor-automation-wth-main/src/TTASLN/TTA.DataGenerator.SQL"
-
-#path bin\Release\net6.0\TTA.DataGenerator.SQL.ddl
-# check connectivity to SQL server
-$sqlConn = "Data Source=$env:COMPUTERNAME\SQLEXPRESS;Integrated Security=true;"
-
-#prepare ENV parameters to run the database creation and assesment
-New-Item -Path Env:\SQL_CONNECTION_STRING -Value "$sqlConn Initial Catalog=master;"
-New-Item -Path Env:\FOLDER_ROOT -Value "$HOME/amaw/azure-demo-monitoring-basics-main"
-New-Item -Path Env:\DROP_DATABASE -Value "true"
-New-Item -Path Env:\CREATE_TABLES -Value "true"
-New-Item -Path Env:\DEFAULT_PASSWORD -Value "Password123!"
-New-Item -Path Env:\RECORD_NUMBER -Value "200"
-
-dotnet run 
-
-Write-Host "Data insert done. Fix connection string in settings file to point to correct urls"
-$appSettings = Get-Content -Path "$rootPath\Web\appsettings.json" | ConvertFrom-Json
-$previousClientUrl = $appSettings.AppOptions.ClientApiUrl
-Write-Host "Current path to client $previousClientUrl, changing to new value https://localhost/web"
-$appSettings.AppOptions.ClientApiUrl = "https://localhost/report/"
-$sqlConn = $sqlConn + "Initial Catalog=TTADB";
-Write-Host "Path changed, setting SQL connection string $sqlConn to new one for Web page"
-$appSettings.SqlOptions.ConnectionString=$sqlConn
-Set-Content -Path "$rootPath\Web\appsettings.json" -Value ($appSettings | ConvertTo-Json)
-
-$appSettings = Get-Content -Path "$rootPath\WebClient\appsettings.json" | ConvertFrom-Json
-Write-Host "Changing settings for clientapp, setting SQL connection string $sqlConn to new one for Web REST client page"
-$appSettings.SqlOptions.ConnectionString=$sqlConn
-Set-Content -Path "$rootPath\WebClient\appsettings.json" -Value ($appSettings | ConvertTo-Json)
-Write-Host "Settings changed, adding .NET core hosting to IIS"
 
 # ASP.NET core hosting module download
 # DIRECT LINK: https://download.visualstudio.microsoft.com/download/pr/c5e0609f-1db5-4741-add0-a37e8371a714/1ad9c59b8a92aeb5d09782e686264537/dotnet-hosting-6.0.8-win.exe
@@ -175,7 +132,6 @@ Start-Process -FilePath "$PWD\hosting.exe" -ArgumentList $args -NoNewWindow -Wai
 net stop was /y
 net start w3svc
 
-Write-Host "Restart done, app is ready on https://localhost/ttaweb and api on https://localhost/ttawebclient"
+Write-Host "Restart done, app is ready on https://localhost/web"
 
-#stop scheduled task for it no to be running every time user logs in
-Stop-ScheduledTask -TaskName "MyLogonToMachine"
+Stop-Transcript

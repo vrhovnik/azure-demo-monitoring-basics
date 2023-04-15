@@ -1,0 +1,24 @@
+﻿@page
+@model DashboardPageModel
+
+@{
+    ViewData["Title"] = "Dashboard";
+}
+
+<div class="row">
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Telemetry</h5>
+                <h6 class="card-subtitle mb-2 text-muted">Sending telemetry from device</h6>
+                <p class="card-text">
+                    Send telemetry from device to App Insights
+                </p>
+                <a asp-page="/Categories/Index"
+                   class="card-link">
+                    Go <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

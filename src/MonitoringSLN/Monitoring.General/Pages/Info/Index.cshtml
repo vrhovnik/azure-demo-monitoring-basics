@@ -1,0 +1,18 @@
+﻿@page
+@model IndexPageModel
+@{
+    ViewData["Title"] = "Simple page for monitoring";
+}
+
+<h1>
+    Simple monitoring examples
+
+    @if (!string.IsNullOrEmpty(Model.ServerName))
+    {
+        <small>- running on @Model.ServerName</small>
+    }
+</h1>
+
+<p>
+    Demo is about showcasing monitoring techniques and tools inside Microsoft Azure.
+<p>
