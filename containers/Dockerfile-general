@@ -1,7 +1,7 @@
 ﻿FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
 
-COPY ["../src/MonitoringSLN/Monitoring.General/", "Monitoring.General/"]
+COPY ["MonitoringSLN/Monitoring.General/", "Monitoring.General/"]
 RUN dotnet restore "Monitoring.General/Monitoring.General.csproj"
 
 COPY . .
