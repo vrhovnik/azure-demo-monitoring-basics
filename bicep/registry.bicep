@@ -33,7 +33,6 @@ module buildBasicAcrImage 'br/public:deployment-scripts/build-acr:2.0.1' = {
     AcrName: acrName
     location: location
     gitRepositoryUrl: 'https://github.com/vrhovnik/azure-demo-monitoring-basics.git'
-    buildWorkingDirectory: 'src'
     dockerfileDirectory: 'containers'
     imageName: 'basic'
     imageTag: 'latest'
@@ -47,7 +46,6 @@ module buildGeneralAcrImage 'br/public:deployment-scripts/build-acr:2.0.1' = {
     AcrName: acrName
     location: location
     gitRepositoryUrl: 'https://github.com/vrhovnik/azure-demo-monitoring-basics.git'    
-    buildWorkingDirectory: 'src'
     dockerfileDirectory: 'containers'
     imageName: 'general'
     imageTag: 'latest'

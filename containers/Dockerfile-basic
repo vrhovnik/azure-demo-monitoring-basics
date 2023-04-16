@@ -1,12 +1,9 @@
 ﻿FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
-WORKDIR /src
 
-COPY ["MonitoringSLN/Monitoring.Basic/", "Monitoring.Basic/"]
+COPY ["src/MonitoringSLN/Monitoring.Basic/", "Monitoring.Basic/"]
 RUN dotnet restore "Monitoring.Basic/Monitoring.Basic.csproj"
 
 COPY . .
-
-WORKDIR "/src/"
 
 RUN dotnet build "Monitoring.Basic/Monitoring.Basic.csproj" -c Release -o /app
 
