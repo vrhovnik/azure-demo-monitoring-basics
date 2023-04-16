@@ -1,3 +1,1 @@
-﻿union requests,dependencies,pageViews,browserTimings,exceptions,traces
-| where timestamp > ago(1d)
-| summarize RetainedPercentage = 100/avg(itemCount) by bin(timestamp, 1h), itemType
+﻿union requests,dependencies,pageViews,browserTimings,exceptions,traces | where timestamp > ago(1d) | summarize RetainedPercentage = 100/avg(itemCount) by bin(timestamp, 1h), itemType

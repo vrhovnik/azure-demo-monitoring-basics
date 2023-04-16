@@ -1,0 +1,1 @@
+﻿_LogOperation | where Category =~ "Ingestion" | where Detail contains "OverQuota"

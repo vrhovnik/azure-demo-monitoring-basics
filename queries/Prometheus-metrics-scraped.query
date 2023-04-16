@@ -1,0 +1,1 @@
+﻿InsightsMetrics | where Namespace contains "prometheus" | extend tags=parse_json(Tags) | summarize count() by Name

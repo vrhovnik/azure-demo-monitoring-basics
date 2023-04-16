@@ -1,0 +1,35 @@
+﻿apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tta-web
+  namespace: tta
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: web
+  template:
+    metadata:
+      labels:
+        app: web
+    spec:
+      nodeSelector:
+        "kubernetes.io/os": linux
+      containers:
+        - name: web
+          image: mcr.azurecr.io/tta/web:1.0
+          env:
+            - name: SqlOptions__ConnectionString
+              value: ""
+            - name: AppOptions__ClientApiUrl
+              value: "http://tta.svc.cluster.local/webapi"
+          resources:
+            requests:
+              cpu: 100m
+              memory: 128Mi
+            limits:
+              cpu: 250m
+              memory: 256Mi
+          ports:
+            - containerPort: 80
+              name: internet

@@ -1,0 +1,13 @@
+﻿let startTime = ago(24h);
+let containerLogs = ContainerLog
+| where TimeGenerated > startTime
+| where _IsBillable == true
+| summarize BillableDataMBytes = sum(_BilledSize)/ (1000. * 1000.) by LogEntrySource, ContainerID;
+let kpi = KubePodInventory
+| where TimeGenerated > startTime
+| distinct ContainerID, Namespace;
+containerLogs
+| join kpi on $left.ContainerID == $right.ContainerID
+| extend sourceNamespace = strcat(LogEntrySource, "/", Namespace)
+| summarize MB=sum(BillableDataMBytes) by sourceNamespace
+| render piechart

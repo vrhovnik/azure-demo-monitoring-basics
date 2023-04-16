@@ -1,0 +1,36 @@
+﻿let startDateTime = 5m; // the minimum time interval goes here
+let _minalertThreshold = 50; //Threshold for minimum and maximum unavailable or not running containers
+let _maxalertThreshold = 70;
+KubePodInventory
+| where TimeGenerated >= ago(startDateTime)
+| distinct ClusterName, TimeGenerated
+| summarize Clustersnapshot = count() by ClusterName
+| join kind=inner (
+    KubePodInventory
+    | where TimeGenerated >= ago(startDateTime)
+    | where Namespace in('default', 'kube-system') and ControllerKind == 'ReplicaSet' // the system namespace filter goes here
+    | distinct ClusterName, Computer, PodUid, TimeGenerated, PodStatus, ServiceName, PodLabel, Namespace, ContainerStatus
+    | summarize arg_max(TimeGenerated, *), TotalPODCount = count(), podCount = sumif(1, PodStatus == 'Running' or PodStatus != 'Running'), containerNotrunning = sumif(1, ContainerStatus != 'running')
+        by ClusterName, TimeGenerated, ServiceName, PodLabel, Namespace
+    )
+    on ClusterName
+| project ClusterName, ServiceName, podCount, containerNotrunning, containerNotrunningPercent = (containerNotrunning * 100 / podCount), TimeGenerated, PodStatus, PodLabel, Namespace, Environment = tostring(split(ClusterName, '-')[3]), Location = tostring(split(ClusterName, '-')[4]), ContainerStatus
+//Uncomment the below line to set for automated alert
+//| where PodStatus == "Running" and containerNotrunningPercent > _minalertThreshold and containerNotrunningPercent < _maxalertThreshold
+| summarize arg_max(TimeGenerated, *), c_entry=count() by PodLabel, ServiceName, ClusterName
+//Below lines are to parse the labels to identify the impacted service/component name
+| extend parseLabel = replace(@'k8s-app', @'k8sapp', PodLabel)
+| extend parseLabel = replace(@'app.kubernetes.io\\/component', @'appkubernetesiocomponent', parseLabel)
+| extend parseLabel = replace(@'app.kubernetes.io\\/instance', @'appkubernetesioinstance', parseLabel)
+| extend tags = todynamic(parseLabel)
+| extend tag01 = todynamic(tags[0].app)
+| extend tag02 = todynamic(tags[0].k8sapp)
+| extend tag03 = todynamic(tags[0].appkubernetesiocomponent)
+| extend tag04 = todynamic(tags[0].aadpodidbinding)
+| extend tag05 = todynamic(tags[0].appkubernetesioinstance)
+| extend tag06 = todynamic(tags[0].component)
+| project ClusterName, TimeGenerated,
+    ServiceName = strcat( ServiceName, tag01, tag02, tag03, tag04, tag05, tag06),
+    ContainerUnavailable = strcat("Unavailable Percentage: ", containerNotrunningPercent),
+    PodStatus = strcat("PodStatus: ", PodStatus), 
+    ContainerStatus = strcat("Container Status: ", ContainerStatus)

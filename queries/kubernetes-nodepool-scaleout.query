@@ -1,0 +1,18 @@
+﻿let nodepoolMaxnodeCount = 10; 
+let _minthreshold = 20;
+let _maxthreshold = 90;
+let startDateTime = 60m;
+KubeNodeInventory
+| where TimeGenerated >= ago(startDateTime)
+| extend nodepoolType = todynamic(Labels) //Parse the labels to get the list of node pool types
+| extend nodepoolName = todynamic(nodepoolType[0].agentpool) // parse the label to get the nodepool name or set the specific nodepool name (like nodepoolName = 'agentpool)'
+| summarize nodeCount = count(Computer) by ClusterName, tostring(nodepoolName), TimeGenerated
+//(Uncomment the below two lines to set this as a log search alert)
+//| extend scaledpercent = iff(((nodeCount * 100 / nodepoolMaxnodeCount) >= _minthreshold and (nodeCount * 100 / nodepoolMaxnodeCount) < _maxthreshold), "warn", "normal")
+//| where scaledpercent == 'warn'
+| summarize arg_max(TimeGenerated, *) by nodeCount, ClusterName, tostring(nodepoolName)
+| project ClusterName, 
+    TotalNodeCount= strcat("Total Node Count: ", nodeCount),
+    ScaledOutPercentage = (nodeCount * 100 / nodepoolMaxnodeCount),  
+    TimeGenerated, 
+    nodepoolName

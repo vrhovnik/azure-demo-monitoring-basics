@@ -103,27 +103,14 @@ New-AzResourceGroupDeployment -ResourceGroupName $groupName -TemplateFile "bicep
 New-AzResourceGroupDeployment -ResourceGroupName $groupName -TemplateFile "bicep\storage.bicep" -TemplateParameterFile "bicep\storage.parameters.json" -Verbose
 # deploy azure registry file if not already deployed
 New-AzResourceGroupDeployment -ResourceGroupName $groupName -TemplateFile "bicep\registry.bicep" -TemplateParameterFile "bicep\registry.parameters.json" -Verbose
-Write-Output "Compiling the containers for registry "
-Write-Verbose "Getting name of the registry"
-$registry = Get-Content "bicep\registry.parameters.json" | ConvertFrom-Json
-$registryName = $registry.parameters.acrName.value
-Write-Verbose "Registry name is $registryName"
-#compile containers
-$TagName = "latest"
-Write-Verbose "Compile containers with latest tag"
-Get-ChildItem -Path "containers" | ForEach-Object {
-    $imageName = $_.Name.Split('-')[1]
-    $dockerFile = $_.FullName
-    Write-Output "Building image $imageName with tag $TagName based on $dockerFile"
-    $imageNameWithTag = "$( $imageName ):$TagName"
-    Write-Output "Taging image with $imageNameWithTag"
-    Write-Information "Call data with AZ cli as we don't have support in Azure PowerShell for this yet."
-    az acr build --registry $registryName --image $imageNameWithTag -f $dockerFile $SourceFolder
-}
 
 New-AzResourceGroupDeployment -ResourceGroupName $groupName -TemplateFile "bicep\aks.bicep" -TemplateParameterFile "bicep\aks.parameters.json" -Verbose
 $aks = Get-Content "bicep\aks.parameters.json" | ConvertFrom-Json
 $aksName = $aks.parameters.aksClusterName.value
+Write-Verbose "AKS name is $aksName"
+$registry = Get-Content "bicep\registry.parameters.json" | ConvertFrom-Json
+$registryName = $registry.parameters.acrName.value
+Write-Verbose "Registry name is $registryName"
 Write-Output "Applying registry $registryName to cluster $aksName"
 Set-AzAksCluster -Name $aksName -ResourceGroupName $groupName -AcrNameToAttach $registryName
 # get azure cluster credentials
@@ -131,7 +118,7 @@ Import-AzAksCredential -ResourceGroupName $groupName -Name $aksName -Verbose
 Write-Output "Credentials to access cluster $aksName in resource group $groupName are imported. Deploying VM."
 # deploy azure VM
 New-AzResourceGroupDeployment -ResourceGroupName $groupName -TemplateFile "bicep\vm.bicep" -TemplateParameterFile "bicep\vm.parameters.json" -Verbose
-#deploy load testing
+##deploy load testing
 New-AzResourceGroupDeployment -ResourceGroupName $groupName -TemplateFile "bicep\load-testing.bicep" -TemplateParameterFile "bicep\load-testing.parameters.json" -Verbose
 
 Stop-Transcript

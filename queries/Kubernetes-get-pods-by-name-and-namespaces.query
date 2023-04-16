@@ -1,0 +1,1 @@
+﻿Perf | where ObjectName == "K8SContainer" and CounterName == "memoryRssBytes" | summarize AvgUsedRssMemoryBytes = avg(CounterValue) by bin(TimeGenerated, 30m), InstanceName

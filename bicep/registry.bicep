@@ -27,6 +27,32 @@ resource acrResource 'Microsoft.ContainerRegistry/registries@2021-06-01-preview'
   }
 }
 
+module buildBasicAcrImage 'br/public:deployment-scripts/build-acr:2.0.1' = {
+  name: 'buildAcrImage-basic'
+  params: {
+    AcrName: acrName
+    location: location
+    gitRepositoryUrl: 'https://github.com/vrhovnik/azure-demo-monitoring-basics.git'
+    buildWorkingDirectory: 'containers'
+    imageName: 'basic'
+    imageTag: 'latest'
+    dockerfileName: 'Dockerfile-basic'    
+  }
+}
+
+module buildGeneralAcrImage 'br/public:deployment-scripts/build-acr:2.0.1' = {
+  name: 'buildAcrImage-general'
+  params: {
+    AcrName: acrName
+    location: location
+    gitRepositoryUrl: 'https://github.com/vrhovnik/azure-demo-monitoring-basics.git'    
+    buildWorkingDirectory: 'containers'
+    imageName: 'general'
+    imageTag: 'latest'
+    dockerfileName: 'Dockerfile-general'    
+  }
+}
+
 @description('Output the login server and registry name')
 output loginServer string = acrResource.properties.loginServer
 output loginName string = acrResource.name

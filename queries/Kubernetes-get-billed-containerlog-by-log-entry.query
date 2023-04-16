@@ -1,0 +1,1 @@
+﻿ContainerLog | where TimeGenerated > ago(1h) | where _IsBillable == true | summarize BillableDataMBytes = sum(_BilledSize)/ (1000. * 1000.) by LogEntrySource

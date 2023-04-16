@@ -1,0 +1,1 @@
+﻿KubeEvents | where not(isempty(Namespace)) | sort by TimeGenerated desc | render table

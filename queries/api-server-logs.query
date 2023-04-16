@@ -1,0 +1,1 @@
+﻿AzureDiagnostics | where Category == "kube-apiserver"
