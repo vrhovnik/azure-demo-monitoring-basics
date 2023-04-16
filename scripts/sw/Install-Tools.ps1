@@ -50,7 +50,8 @@ Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManage
 Invoke-Expression ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
 
 Write-Host "Installing  dotnet SDK ... "
-choco install -y dotnet-sdk --version=6.0.408
+choco install -y dotnet-sdk
+choco install -y dotnet-sdk --version=6.0.408 --side-by-side
 
 Write-Host "Installing Git ... "
 choco install -y git
