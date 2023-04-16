@@ -1,8 +1,8 @@
 ﻿apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: tta-web
-  namespace: tta
+  name: monitoring-simple
+  namespace: monitoring
 spec:
   replicas: 1
   selector:
@@ -17,12 +17,7 @@ spec:
         "kubernetes.io/os": linux
       containers:
         - name: web
-          image: mcr.azurecr.io/tta/web:1.0
-          env:
-            - name: SqlOptions__ConnectionString
-              value: ""
-            - name: AppOptions__ClientApiUrl
-              value: "http://tta.svc.cluster.local/webapi"
+          image: $REGISTRY$.azurecr.io/simple:basic          
           resources:
             requests:
               cpu: 100m
@@ -33,3 +28,15 @@ spec:
           ports:
             - containerPort: 80
               name: internet
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: monitoring-simple-svc
+  namespace: monitoring
+spec:
+  type: LoadBalancer
+  ports:
+    - port: 80
+  selector:
+    app: monitoring-simple

@@ -3,7 +3,7 @@
   "contentVersion": "1.0.0.0",
   "parameters": {
     "vmName": {
-      "value": "vm-monitoring-2022"
+      "value": "vm-mon-2022"
     },
     "publicIpAddressName": {
       "value": "vm-monitoring-public-access-2022"

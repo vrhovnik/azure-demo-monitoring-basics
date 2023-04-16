@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: monitoring-simple
+  namespace: monitoring
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: web
+  template:
+    metadata:
+      labels:
+        app: web
+    spec:
+      nodeSelector:
+        "kubernetes.io/os": linux
+      containers:
+        - name: web
+          image: acrmonitoringdemo.azurecr.io/simple:basic          
+          resources:
+            requests:
+              cpu: 100m
+              memory: 128Mi
+            limits:
+              cpu: 250m
+              memory: 256Mi
+          ports:
+            - containerPort: 80
+              name: internet
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: monitoring-simple-svc
+  namespace: monitoring
+spec:
+  type: LoadBalancer
+  ports:
+    - port: 80
+  selector:
+    app: monitoring-simple

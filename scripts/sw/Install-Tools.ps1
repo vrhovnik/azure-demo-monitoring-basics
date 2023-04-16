@@ -32,16 +32,16 @@ New-ItemProperty @registryPath -Name 'OutputDirectory' -PropertyType 'String' -V
 
 Start-Transcript
 
-Write-Host "Install SQL express engine"
-Invoke-WebRequest "https://go.microsoft.com/fwlink/?LinkID=866658" -o "$PWD\sqlsetup.exe"
-
-$args = New-Object -TypeName System.Collections.Generic.List[System.String]
-$args.Add("/ACTION=install")
-$args.Add("/Q")
-$args.Add("/IACCEPTSQLSERVERLICENSETERMS")
-
-Write-Host "Installing SQL Express silently..."
-Start-Process -FilePath "$PWD\sqlsetup.exe" -ArgumentList $args -NoNewWindow -Wait -PassThru
+#Write-Host "Install SQL express engine"
+#Invoke-WebRequest "https://go.microsoft.com/fwlink/?LinkID=866658" -o "$PWD\sqlsetup.exe"
+#
+#$args = New-Object -TypeName System.Collections.Generic.List[System.String]
+#$args.Add("/ACTION=install")
+#$args.Add("/Q")
+#$args.Add("/IACCEPTSQLSERVERLICENSETERMS")
+#
+#Write-Host "Installing SQL Express silently..."
+#Start-Process -FilePath "$PWD\sqlsetup.exe" -ArgumentList $args -NoNewWindow -Wait -PassThru
 
 # installing chocolatey to install additional services 
 Write-Host "Installing chocolatey"
@@ -50,7 +50,7 @@ Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManage
 Invoke-Expression ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
 
 Write-Host "Installing  dotnet SDK ... "
-choco install -y dotnet-sdk
+choco install -y dotnet-sdk --version=6.0.408
 
 Write-Host "Installing Git ... "
 choco install -y git
@@ -98,7 +98,7 @@ Enable-WindowsOptionalFeature -Online -FeatureName IIS-HttpCompressionStatic
 Enable-WindowsOptionalFeature -Online -FeatureName IIS-ASPNET45
 
 Write-Host "Getting source code and storing it to $HOME/amaw"
-$zipPath="https://github.com/vrhovnik/azure-demo-monitoring-basics/archive/refs/heads/main.zip"
+$zipPath="https://codeload.github.com/vrhovnik/azure-demo-monitoring-basics/zip/refs/heads/main"
 Set-Location $HOME
 Invoke-WebRequest -Uri $zipPath -OutFile "$HOME\amaw.zip"
 #extract to amaw folder
@@ -109,7 +109,7 @@ Set-Location "$HOME/amaw/azure-demo-monitoring-basics-main/src/MonitoringSLN/Mon
 
 $rootPath = "C:\Inetpub\wwwroot\"
 Write-Host "Creating Folder Web and publishing solution Web to wwwroot"
-mkdir "$rootPath\Web"
+New-Item -ItemType Directory "$rootPath\Web" -Force
 dotnet publish --configuration Release -o "$rootPath\Web"
 
 Write-Host "Create web applications directories in IIS - web"

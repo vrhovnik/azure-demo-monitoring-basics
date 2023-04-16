@@ -8,6 +8,9 @@
     "aksClusterName":{
       "value":"aks-monitoring-basics"
     },
+    "dnsPrefix":{
+      "value":"aks-monitoring-basics-demo"
+    },
     "osType": {
       "value": "Linux"
     },

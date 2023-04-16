@@ -22,7 +22,10 @@ If you will be working on your local machines, you will need to have:
    installed
 2. git installed - instructions step by step [here](https://docs.github.com/en/get-started/quickstart/set-up-git)
 3. [.NET](https://dot.net) installed to run the application if you want to run it locally
-4. an editor (besides notepad) to see and work with code, scripts and more (for
+4. Kubectl installed to work with Kubernetes - you can
+   use [Install-AzAskKubectl](https://learn.microsoft.com/en-us/powershell/module/az.aks/install-azaksclitool?view=azps-9.6.0)
+   cmdlet
+5. an editor (besides notepad) to see and work with code, scripts and more (for
    example [Visual Studio Code](https://code.visualstudio.com) or [NeoVim](https://neovim.io/))
 
 ## Basics
@@ -62,7 +65,8 @@ It will create resource for you to be able to work with:
    file). It will compile containers from *containers* folder and push them to the registry.
 7. Azure Kubernetes Service with connection to Azure Container Registry (you can change values
    in [parameters](bicep/aks.parameters.json) file). After creating the resource, it will attach registry and get
-   connection information and store them to .kubeconfig file to be able to access the cluster.
+   connection information and store them to .kubeconfig file to be able to access the cluster. It will deploy newly
+   created containers as deployment inside namespace with public access points.
 8. Azure Virtual Machine and will install basic web application with SQL, Sysinternals, .NET and other tools to be able
    to work
    with the environment.
@@ -70,6 +74,8 @@ It will create resource for you to be able to work with:
 
 To connect to the cluster, follow
 this [instructions](https://learn.microsoft.com/en-us/azure/aks/learn/quick-kubernetes-deploy-bicep?tabs=azure-powershell%2CCLI#connect-to-the-cluster).
+
+_Note:_ It will take around 1h to setup everything.
 
 ## Demos
 

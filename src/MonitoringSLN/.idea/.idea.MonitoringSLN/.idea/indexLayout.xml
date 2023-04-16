@@ -6,6 +6,7 @@
       <Path>../../containers</Path>
       <Path>../../queries</Path>
       <Path>../../scripts</Path>
+      <Path>../../yaml</Path>
     </attachedFolders>
     <explicitIncludes />
     <explicitExcludes />
