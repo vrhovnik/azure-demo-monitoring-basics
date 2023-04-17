@@ -34,22 +34,19 @@ public class SendLogPageModel : PageModel
             LogViewModel.Name, monitoringOptions.DCE);
 
         var currentTime = DateTimeOffset.UtcNow;
-        var data = BinaryData.FromObjectAsJson(
-            new[]
-            {
-                new
+        var currentSender = new LoaderViewModel
+        {
+            MyTime = currentTime,
+            Computer = Environment.MachineName,
+            AdditionalContext = new
+                CustomLogViewModel
                 {
-                    Time = currentTime,
-                    Computer = Environment.MachineName,
-                    AdditionalContext = new
-                        CustomLogViewModel
-                        {
-                            Name = LogViewModel.Name,
-                            CounterValue = LogViewModel.CounterValue,
-                            CounterName = LogViewModel.CounterName
-                        }
+                    Name = LogViewModel.Name,
+                    CounterValue = LogViewModel.CounterValue,
+                    CounterName = LogViewModel.CounterName
                 }
-            });
+        };
+        var data = BinaryData.FromObjectAsJson(new[] { currentSender });
 
         var client =
             new LogsIngestionClient(new Uri(monitoringOptions.DCE, UriKind.RelativeOrAbsolute),

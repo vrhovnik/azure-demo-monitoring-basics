@@ -22,7 +22,7 @@
     Send custom log below
 </h2>
 
-@if (string.IsNullOrEmpty(Model.Message))
+@if (!string.IsNullOrEmpty(Model.Message))
 {
     <p class="text-warning">@Model.Message</p>
 }
