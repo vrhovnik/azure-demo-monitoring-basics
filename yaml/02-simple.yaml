@@ -17,7 +17,7 @@ spec:
         "kubernetes.io/os": linux
       containers:
         - name: web
-          image: $REGISTRY$.azurecr.io/simple:basic          
+          image: $REGISTRY$.azurecr.io/basic:latest          
           resources:
             requests:
               cpu: 100m

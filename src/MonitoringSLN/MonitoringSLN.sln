@@ -4,6 +4,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Monitoring.General", "Monit
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Monitoring.Basic", "Monitoring.Basic\Monitoring.Basic.csproj", "{6E2D564E-A108-4750-A1D6-3318E605CE22}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Monitoring.OpenTelemetryExport", "Monitoring.OpenTelemetryExport\Monitoring.OpenTelemetryExport.csproj", "{2B559C8D-19CA-41B1-A55D-094CEFA2072B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -18,5 +20,9 @@ Global
 		{6E2D564E-A108-4750-A1D6-3318E605CE22}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6E2D564E-A108-4750-A1D6-3318E605CE22}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6E2D564E-A108-4750-A1D6-3318E605CE22}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2B559C8D-19CA-41B1-A55D-094CEFA2072B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2B559C8D-19CA-41B1-A55D-094CEFA2072B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2B559C8D-19CA-41B1-A55D-094CEFA2072B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2B559C8D-19CA-41B1-A55D-094CEFA2072B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

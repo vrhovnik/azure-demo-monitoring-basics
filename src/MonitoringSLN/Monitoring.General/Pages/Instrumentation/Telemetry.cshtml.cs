@@ -22,5 +22,7 @@ public class TelemetryPageModel : PageModel
         logger.LogInformation("Loading page at {DateLoaded}", DateTime.Now);
         pageViewTelemetry.Properties["Page"] = "Telemetry";
         telemetry.TrackPageView(pageViewTelemetry);
+        logger.LogInformation("Sent page TelemetryPageModel info to Application Insights.");
+        
     }
 }
