@@ -50,9 +50,14 @@ Write-Output "Getting VM $VmName in resource group $ResourceGroupName and all th
 
 $vm = Get-AzVM -VMName $VmName -ResourceGroupName $ResourceGroupName
 Write-Verbose "VM $VmName in resource group $ResourceGroupName with id $($vm.Id)"
-$nic = Get-AzNetworkInterface -ResourceId $vm.NetworkProfile.NetworkInterfaces[0].Id
+$nic = Get-AzNetworkInterface -ResourceId $vm.NetworkProfile.NetworkInterfaces.Id
 Write-Verbose "Getting NIC $($nic.Name) in resource group $($nic.ResourceGroupName) with id $($nic.Id)"
 $nsg = Get-AzNetworkSecurityGroup | Where-Object -Property Id -EQ $nic.NetworkSecurityGroup[0].Id 
+if ($null -eq $nsg){
+    Write-Host "NSG is not assigned to the VM $VmName in resource group $ResourceGroupName. Cannot add rules."
+    return;
+}
+    
 Write-Verbose "Getting NSG $($nsg.Name) in resource group $($nsg.ResourceGroupName) with id $($nsg.Id)"
 
 #check, if NSG rule already exists
@@ -70,7 +75,7 @@ Write-Verbose "Checking trusted hosts on the client machine for the VM $VmName"
 $trustedHosts = Get-Item wsman:\localhost\Client\TrustedHosts
 if ($trustedHosts -eq "" -or $null -eq $trustedHosts -or $trustedHosts.Value.Contains($VmName) -eq $false) {
     Write-Output "Trusted hosts on the client machine are empty, adding $VmName to trusted hosts on the client machine"
-    Set-Item wsman:\localhost\Client\TrustedHosts -Value $VmName
+    Set-Item wsman:\localhost\Client\TrustedHosts -Value $VmName -Confirm:$false
     Write-Output "Added $VmName to trusted hosts on the client machine, continuing with enabling PS remote on $VmName"
 }
 
@@ -105,9 +110,11 @@ if ($EstablishRemoteConnection) {
     $Skip = New-PSSessionOption -SkipCACheck -SkipCNCheck
     Write-Verbose "Skip the requirement to import a certificate to the VM when you start the session"
     Write-Verbose "Getting IP to connect to the VM"
-    $publicIpName = $nic.IpConfigurations.PublicIpAddress.Name
-    Write-Verbose "Name of the public IP is $publicIpName"
-    $publicIp = Get-AzPublicIpAddress -Name $publicIpId
-    Write-Verbose "Public IP is $($publicIp.IpAddress)"
+    $publicIpId = $nic.IpConfigurations.PublicIpAddress.Id
+    Write-Verbose "Name of the public IP is $publicIpId"
+    $publicName = $publicIpId.Split("/") | Select-Object -Last 1
+    Write-Verbose "Name of the public IP is $publicName"
+    $publicIp = Get-AzPublicIpAddress -Name $publicName -ResourceGroupName $ResourceGroupName
+    Write-Verbose "Public IP is $($publicIp.IpAddress) - connecting to it..."
     Enter-PSSession -ComputerName $publicIp.IpAddress -port "5986" -Credential (Get-Credential) -useSSL -SessionOption $Skip
 }
