@@ -31,10 +31,9 @@ public class SearchPageModel : PageModel
         LogsQueryClient logsQueryClient = new(credential);
 
         LogsBatchQuery batch = new();
-        var query = $"{monitoringOptions.TableName}";
         var queryResult = batch.AddWorkspaceQuery(
             monitoringOptions.WorkspaceId,
-            Query,
+            monitoringOptions.StreamName,
             new QueryTimeRange(TimeSpan.FromDays(1)));
 
         Response<LogsBatchQueryResultCollection> queryResponse =

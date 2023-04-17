@@ -13,27 +13,33 @@
         </li>
         <li aria-current="page"
             class="breadcrumb-item active">
-            Getting last 20 activity logs
+            Getting last 20 activity perf logs
         </li>
     </ol>
 }
 
-<h2>Getting last 20 activity logs </h2>
+<h2>Getting last 20 perf logs </h2>
 
 @if (Model.Result.Any())
 {
     <table class="table table-hover">
         <thead>
         <tr>
-            <th scope="col">Operation name</th>
-            <th scope="col">Resource group name</th>
+            <th scope="col">Computer name</th>
+            <th scope="col">Object name</th>
+            <th scope="col">Counter name</th>
+            <th scope="col">Counter Value</th>
         </tr>
         </thead>
         <tbody>
         @foreach (var currentLogData in Model.Result)
         {
-            <td>@currentLogData.OperationName</td>
-            <td>@currentLogData.ResourceGroup</td>
+            <tr>
+                <td>@currentLogData.Computer</td>
+                <td>@currentLogData.ObjectName</td>
+                <td>@currentLogData.CounterName</td>
+                <td>@currentLogData.CounterValue</td>
+            </tr>
         }
         </tbody>
     </table>

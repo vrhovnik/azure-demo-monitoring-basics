@@ -27,23 +27,26 @@ public class ActivityLogsPageModel : PageModel
         
         var client = new LogsQueryClient(new DefaultAzureCredential());
         var response = await client.QueryWorkspaceAsync(
-            monitoringOptions.WorkspaceId,
-            "AzureActivity | top 20 by TimeGenerated",
-            new QueryTimeRange(TimeSpan.FromDays(1)));
+           // monitoringOptions.WorkspaceId,
+           "b50e3aee-db8c-4317-b3d0-8f44b6e9f7f7",
+            "Perf | top 20 by TimeGenerated",
+            new QueryTimeRange(TimeSpan.FromDays(7)));
 
         var table = response.Value.Table;
-        var list = new List<ActivityLogResultViewModel>();
+        var list = new List<PerfResultViewModel>();
         foreach (var row in table.Rows)
         {
-            list.Add(new ActivityLogResultViewModel
+            list.Add(new PerfResultViewModel
             {
-                OperationName = row["OperationName"].ToString(),
-                ResourceGroup = row["ResourceGroup"].ToString()
+                Computer = row["Computer"].ToString(),
+                ObjectName = row["ObjectName"].ToString(),
+                CounterName = row["CounterName"].ToString(),
+                CounterValue = row["CounterValue"].ToString()
             });    
         }
 
         Result = list;
     }
 
-    public List<ActivityLogResultViewModel> Result { get; set; }
+    public List<PerfResultViewModel> Result { get; set; }
 }
