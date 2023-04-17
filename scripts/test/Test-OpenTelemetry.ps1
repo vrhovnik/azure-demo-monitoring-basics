@@ -34,13 +34,16 @@ param(
 )
 
 Write-Information "Testing $Url and sending $RecordNumber records to the endpoint"
-for ($currentRequestNumber = 0; $currentRequestNumber -lt $array.Count; $currentRequestNumber++) {
+for ($currentRequestNumber = 0; $currentRequestNumber -lt $RecordNumber; $currentRequestNumber++) {
     $body = (@{
-        username = "Foo $recordNumber"
-        password = "Bar $recordNumber"
+        username = "Foo $currentRequestNumber"
+        password = "Bar $currentRequestNumber"
     } | ConvertTo-Json)
-    Write-Information "Sending $body"
+    Write-Host "Sending $body"
     Invoke-WebRequest $Url -Method Post -ContentType 'application/json' -Body $body    
 }
 
-Write-Information "Done with sending $RecordNumber records to the endpoint $Url"  
+Write-Host "Done with sending $RecordNumber records to the endpoint $Url"  
+Write-Information "Open Application Insights portal to see the results"
+
+Start-Process "https://portal.azure.com/#view/HubsExtension/BrowseResource/resourceType/microsoft.insights%2Fcomponents"

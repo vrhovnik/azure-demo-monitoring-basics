@@ -8,9 +8,11 @@ public class ThrowExceptionPageModel : PageModel
 
     public ThrowExceptionPageModel(ILogger<ThrowExceptionPageModel> logger) => this.logger = logger;
 
-    public void OnGet()
+    public void OnGet() => logger.LogInformation("Page loaded {DateLoaded}. Throwing an exception", DateTime.Now);
+
+    public void OnPost()
     {
-        logger.LogInformation("Page loaded {DateLoaded}. Throwing an exception", DateTime.Now);
-        throw new Exception($"Throwing an exception at {DateTime.Now}");
+        logger.LogInformation("Creating exception at {DateLoaded}", DateTime.Now);
+        throw new Exception("Manual caused exception.");
     }
 }

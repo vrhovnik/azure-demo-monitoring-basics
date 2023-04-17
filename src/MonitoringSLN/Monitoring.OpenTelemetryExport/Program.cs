@@ -44,6 +44,8 @@ builder.Logging.ClearProviders()
         loggerOptions.ParseStateValues = true;
     });
 
+builder.Services.AddHealthChecks();
+
 var app = builder.Build();
 
 app.MapGet("/", (ILogger<Program> logger) =>
