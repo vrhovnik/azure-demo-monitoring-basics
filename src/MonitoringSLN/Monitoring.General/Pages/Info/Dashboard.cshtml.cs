@@ -9,7 +9,7 @@ public class DashboardPageModel : PageModel
     private readonly TelemetryClient telemetry;
     private readonly ILogger<DashboardPageModel> logger;
 
-    public DashboardPageModel(TelemetryClient telemetry,Logger<DashboardPageModel> logger)
+    public DashboardPageModel(TelemetryClient telemetry,ILogger<DashboardPageModel> logger)
     {
         this.telemetry = telemetry;
         telemetry.Context.Device.Id = Environment.MachineName;

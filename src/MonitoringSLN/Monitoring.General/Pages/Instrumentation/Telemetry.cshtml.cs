@@ -1,5 +1,6 @@
 ﻿using Microsoft.ApplicationInsights;
 using Microsoft.ApplicationInsights.DataContracts;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace Monitoring.General.Pages.Instrumentation;
@@ -9,7 +10,7 @@ public class TelemetryPageModel : PageModel
     private readonly TelemetryClient telemetry;
     private readonly ILogger<TelemetryPageModel> logger;
 
-    public TelemetryPageModel(TelemetryClient telemetry, Logger<TelemetryPageModel> logger)
+    public TelemetryPageModel(TelemetryClient telemetry, ILogger<TelemetryPageModel> logger)
     {
         this.telemetry = telemetry;
         telemetry.Context.Device.Id = Environment.MachineName;
@@ -47,6 +48,12 @@ public class TelemetryPageModel : PageModel
             logger.LogError(e.Message);
             telemetry.TrackException(e);
         }
-        logger.LogInformation("Trace has been sent and logged");
+
+        var traceMessage = "Trace has been sent and logged";
+        logger.LogInformation(traceMessage);
+        Message = traceMessage;
     }
+
+    [BindProperty]
+    public string Message { get; set; }
 }

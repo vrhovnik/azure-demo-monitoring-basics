@@ -20,6 +20,13 @@
 
 <h1>Telemetry</h1>
 
+@if (!string.IsNullOrEmpty(Model.Message))
+{
+    <div class="alert alert-success">
+        @Model.Message
+    </div>
+}
+
 <form enctype="multipart/form-data"
       method="post">
     <div class="form-group">

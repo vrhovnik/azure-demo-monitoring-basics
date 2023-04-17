@@ -15,11 +15,8 @@ builder.Services.AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)
 
 builder.Services.AddRazorPages().AddRazorPagesOptions(options =>
         options.Conventions
-            .AddPageRoute("/Info/Index", ""))
+            .AddPageRoute("/Info/Dashboard", ""))
     .AddMicrosoftIdentityUI();
-
-builder.Services.AddRazorPages().AddRazorPagesOptions(options =>
-    options.Conventions.AddPageRoute("/Info/Index", ""));
 
 builder.Services.AddHealthChecks();
 builder.Services.AddApplicationInsightsTelemetry();

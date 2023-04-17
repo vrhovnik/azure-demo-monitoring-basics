@@ -1,17 +1,10 @@
-﻿using System.Net;
-using Azure;
-using Azure.Core;
+﻿using Azure.Core;
 using Azure.Identity;
 using Azure.Monitor.Ingestion;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.Azure.Management.ResourceManager.Fluent;
-using Microsoft.Extensions.Azure;
 using Microsoft.Extensions.Options;
-using Microsoft.IdentityModel.Clients.ActiveDirectory;
-using Microsoft.Rest;
-using Microsoft.Rest.Azure.Authentication;
 using Monitoring.General.Options;
 using Monitoring.General.ViewModels;
 
@@ -22,14 +15,11 @@ public class SendLogPageModel : PageModel
 {
     private readonly ILogger<SendLogPageModel> logger;
     private MonitoringOptions monitoringOptions;
-    private AzureAdOptions azureAdOptions;
 
     public SendLogPageModel(ILogger<SendLogPageModel> logger,
-        IOptions<AzureAdOptions> azureAdValue,
         IOptions<MonitoringOptions> monitoringOptionsValue)
     {
         monitoringOptions = monitoringOptionsValue.Value;
-        azureAdOptions = azureAdValue.Value;
         this.logger = logger;
     }
 
