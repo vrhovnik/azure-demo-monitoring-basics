@@ -2,7 +2,7 @@
 using Microsoft.ApplicationInsights.DataContracts;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace Monitoring.General.Pages.Instrumentation;
+namespace Monitoring.General.Pages.Info;
 
 public class DashboardPageModel : PageModel
 {

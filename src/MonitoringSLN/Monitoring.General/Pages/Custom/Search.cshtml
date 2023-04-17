@@ -1,0 +1,41 @@
+﻿@page "{query?}"
+@model SearchPageModel
+
+@{
+    ViewData["Title"] = "Search";
+}
+
+@section breadcrumb
+{
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+            <a asp-page="/Info/Dashboard">Dashboard</a>
+        </li>
+        <li aria-current="page"
+            class="breadcrumb-item active">
+            Searching through custom logs $Model.Query
+        </li>
+    </ol>
+}
+
+<h2>Search @Model.Query</h2>
+<div class="container">
+    <input aria-label="search term"
+           asp-for="Query"
+           autocomplete="off"
+           class="form-control"
+           hx-get
+           hx-swap="outerHtml"
+           hx-target="#grid"
+           hx-trigger="keyup changed delay:300ms"
+           placeholder="enter search term"
+           type="text">
+</div>
+<div class="container mt-2">
+    @await Html.PartialAsync("_SearchResults", Model.Result)
+</div>
+
+@section Scripts
+{
+    <script src="https://unpkg.com/htmx.org@1.6.0"></script>
+}

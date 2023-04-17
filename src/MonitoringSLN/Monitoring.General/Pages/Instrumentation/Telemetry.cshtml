@@ -5,4 +5,28 @@
     ViewData["Title"] = "Telemetry page";
 }
 
+@section breadcrumb
+{
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+            <a asp-page="/Info/Dashboard">Dashboard</a>
+        </li>
+        <li aria-current="page"
+            class="breadcrumb-item active">
+            Sending telemetry
+        </li>
+    </ol>
+}
+
 <h1>Telemetry</h1>
+
+<form enctype="multipart/form-data"
+      method="post">
+    <div class="form-group">
+        <button class="btn btn-primary mr-2"
+                type="submit">
+            Send custom telemetry <i class="fas fa-save"></i>
+        </button>
+        <a asp-page="/Info/Dashboard">Cancel</a>
+    </div>
+</form>

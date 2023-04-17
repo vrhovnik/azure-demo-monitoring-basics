@@ -48,8 +48,8 @@ var app = builder.Build();
 
 app.MapGet("/", (ILogger<Program> logger) =>
 {
-    logger.LogInformation("Hello caller!");
-    return Results.Ok();
+    logger.LogInformation("Hello caller at {DateLoaded}!", DateTime.Now);
+    return Results.Ok($"Loaded at {DateTime.Now}");
 });
 
 app.MapPost("/login", (ILogger<Program> logger, [FromBody] LoginData data) =>

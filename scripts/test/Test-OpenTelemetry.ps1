@@ -36,8 +36,8 @@ param(
 Write-Information "Testing $Url and sending $RecordNumber records to the endpoint"
 for ($currentRequestNumber = 0; $currentRequestNumber -lt $array.Count; $currentRequestNumber++) {
     $body = (@{
-        username = 'Foo $recordNumber'
-        password = 'Bar $recordNumber'
+        username = "Foo $recordNumber"
+        password = "Bar $recordNumber"
     } | ConvertTo-Json)
     Write-Information "Sending $body"
     Invoke-WebRequest $Url -Method Post -ContentType 'application/json' -Body $body    

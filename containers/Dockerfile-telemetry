@@ -1,6 +1,6 @@
 ﻿FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 
-COPY ["src/MonitoringSLN/Monitoring.Basic/", "Monitoring.Basic/"]
+COPY ["src/MonitoringSLN/Monitoring.OpenTelemetryExport/", "Monitoring.OpenTelemetryExport/"]
 RUN dotnet restore "Monitoring.OpenTelemetryExport/Monitoring.OpenTelemetryExport.csproj"
 
 COPY . .

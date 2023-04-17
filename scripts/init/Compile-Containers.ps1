@@ -1,14 +1,30 @@
-﻿<# 
-# SYNOPSIS
-# compile containers from folder
-#
-# DESCRIPTION
-# uses Azure Registry Containers to compile containers from folder
-# NOTES
-# Author      : Bojan Vrhovnik
-# GitHub      : https://github.com/vrhovnik
-# Version 1.5.1
-# SHORT CHANGE DESCRIPTION: added parameters and build script to build all containers in folder with transcript enabled
+﻿<#
+
+ .SYNOPSIS
+
+Compile containers inside the folder containers with az cli
+
+.DESCRIPTION
+
+Compile containers inside the folder containers with az cli and sends tasks to the registry to compile the code
+ 
+.EXAMPLE
+
+PS > Compile-Containers.ps1 
+
+Compile containers inside the folder containers with az cli in resource group monitoring-rg and registry acr-monitoring
+
+.EXAMPLE
+
+PS > Compile-Containers.ps1 -ResourceGroupName "monitoring-rg" -RegistryName "acr-monitoring" -FolderName "containers" -TagName "latest" -SourceFolder "src"
+
+Compiles containers inside the folder containers with az cli in resource group monitoring-rg and registry acr-monitoring
+with folder name containers, tag name latest and source folder src
+    
+. LINK
+
+http://github.com/vrhovnik
+ 
 #>
 param(
     [Parameter(Mandatory = $false)]

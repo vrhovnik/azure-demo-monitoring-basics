@@ -1,0 +1,44 @@
+﻿@page ""
+@model Monitoring.General.Pages.Info.ActivityLogsPageModel
+
+@{
+    ViewData["Title"] = "Activity Logs";
+}
+
+@section breadcrumb
+{
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+            <a asp-page="/Info/Dashboard">Dashboard</a>
+        </li>
+        <li aria-current="page"
+            class="breadcrumb-item active">
+            Getting last 20 activity logs
+        </li>
+    </ol>
+}
+
+<h2>Getting last 20 activity logs </h2>
+
+@if (Model.Result.Any())
+{
+    <table class="table table-hover">
+        <thead>
+        <tr>
+            <th scope="col">Operation name</th>
+            <th scope="col">Resource group name</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var currentLogData in Model.Result)
+        {
+            <td>@currentLogData.OperationName</td>
+            <td>@currentLogData.ResourceGroup</td>
+        }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>No data has been retrieved, check logs for more details.</p>
+}

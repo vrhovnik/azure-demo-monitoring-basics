@@ -133,12 +133,35 @@ $yamlSimple = $yamlSimple.Replace('$REGISTRY$', $registryName)
 New-Item "yaml\02-simple-$registryName.yaml" -Force
 Set-Content -Path "yaml\02-simple-$registryName.yaml" -Value $yamlSimple
 Write-Verbose "Yaml simple has been updated"
+
 $yamlGeneral = Get-Content "yaml\02-general.yaml" -Raw
 Write-Verbose "Yaml file is $yamlGeneral"
 $yamlGeneral = $yamlGeneral.Replace('$REGISTRY$', $registryName)
 New-Item "yaml\02-general-$registryName.yaml" -Force
 Set-Content -Path "yaml\02-general-$registryName.yaml" -Value $yamlGeneral
 Write-Verbose "Yaml general has been updated"
+
+$yamlTelemetry = Get-Content "yaml\02-telemetry.yaml" -Raw
+Write-Verbose "Yaml file is $yamlTelemetry"
+$yamlTelemetry = $yamlTelemetry.Replace('$REGISTRY$', $registryName)
+
+$aiInsights = Get-Content "bicep\application-insights.parameters.json" | ConvertFrom-Json
+Write-Verbose "AI parameters $aiInsights"
+$aiName = $aiInsights.parameters.appInsightName.value
+Write-Verbose "AI name is $aiName"
+$aiResource = Get-AzResource -Name $aiName -ResourceType "Microsoft.Insights/components" -ResourceGroupName $groupName
+Write-Verbose "AI resource is $aiResource"
+$details = Get-AzResource -ResourceId $aiResource.ResourceId
+$aiKey = $details.Properties.InstrumentationKey
+Write-Verbose "AI key is $aiKey"
+
+$bytes = [System.Text.Encoding]::UTF8.GetBytes($aiKey)
+$encoded = [Convert]::ToBase64String($bytes)
+$yamlTelemetry = $yamlTelemetry.Replace('$AI_CONN_STRING$', $encoded)
+
+New-Item "yaml\02-telemetry-$registryName.yaml" -Force
+Set-Content -Path "yaml\02-telemetry-$registryName.yaml" -Value $yamlTelemetry
+Write-Verbose "Yaml telemetry has been updated"
  
 # get azure cluster credentials
 Import-AzAksCredential -ResourceGroupName $groupName -Name $aksName -PassThru -Confirm:$false -Verbose 
@@ -147,6 +170,7 @@ Import-AzAksCredential -ResourceGroupName $groupName -Name $aksName -PassThru -C
 kubectl apply -f "yaml/01-namespace.yaml"
 kubectl apply -f "yaml/02-simple-$registryName.yaml"
 kubectl apply -f "yaml/02-general-$registryName.yaml"
+kubectl apply -f "yaml/02-telemetry-$registryName.yaml"
 
 Write-Output "Credentials to access cluster $aksName in resource group $groupName are imported. Deploying VM."
 # deploy azure VM

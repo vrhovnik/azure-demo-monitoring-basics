@@ -1,0 +1,69 @@
+﻿@page
+@model DashboardPageModel
+
+@{
+    ViewData["Title"] = "Dashboard";
+}
+
+<div class="row">
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Search</h5>
+                <h6 class="card-subtitle mb-2 text-muted">Searching logs via Azure Monitor</h6>
+                <p class="card-text">
+                    Searching logs via Azure Monitor
+                </p>
+                <a asp-page="/Info/Search"
+                   class="card-link">
+                    Go <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Activity logs</h5>
+                <h6 class="card-subtitle mb-2 text-muted">getting back activity logs</h6>
+                <p class="card-text">
+                    Checking activity logs via Azure Monitor
+                </p>
+                <a asp-page="/Info/ActivityLogs"
+                   class="card-link">
+                    Go <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Telemetry</h5>
+                <h6 class="card-subtitle mb-2 text-muted">Sending telemetry from device</h6>
+                <p class="card-text">
+                    Send telemetry from device to App Insights
+                </p>
+                <a asp-page="/Instrumentation/Telemetry"
+                   class="card-link">
+                    Go <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Send custom logs</h5>
+                <h6 class="card-subtitle mb-2 text-muted">Sending custom logs</h6>
+                <p class="card-text">
+                    Send custom logs to Azure Monitor
+                </p>
+                <a asp-page="/Custom/SendLog"
+                   class="card-link">
+                    Go <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
