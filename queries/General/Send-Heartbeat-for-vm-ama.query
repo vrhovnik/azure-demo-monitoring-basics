@@ -1,0 +1,5 @@
+﻿Heartbeat
+| where TimeGenerated > ago(24h)
+| where Computer has "vm-mon-2022"
+| project TimeGenerated, Category, Version
+| order by TimeGenerated desc

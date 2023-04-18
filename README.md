@@ -77,6 +77,8 @@ this [instructions](https://learn.microsoft.com/en-us/azure/aks/learn/quick-kube
 
 _Note:_ It will take around 1h to setup everything.
 
+To install agent via policy, you can use this [definition](https://ms.portal.azure.com/#view/Microsoft_Azure_Policy/InitiativeDetailBlade/id/%2Fproviders%2FMicrosoft.Authorization%2FpolicySetDefinitions%2F0d1b56c6-6d1f-4a5d-8695-b15efbea6b49/scopes%7E/%5B%22%2Fsubscriptions%2Fae71ef11-a03f-4b4f-a0e6-ef144727c711%22%5D).
+
 ## Demos
 
 To try out different functionalities we have sample scripts and applications to be able to work with.
