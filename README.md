@@ -185,19 +185,14 @@ You can read about different techniques and options here:
 9. [Azure Container Apps](https://learn.microsoft.com/en-us/azure/container-apps/)
 10. [Azure Kubernetes Service](https://learn.microsoft.com/en-us/azure/aks/intro-kubernetes)
 11. [Sysinternals](https://docs.microsoft.com/en-us/sysinternals/)
+12. [Monitor.Az](https://learn.microsoft.com/en-us/powershell/module/az.monitor/?view=azps-9.6.0)
 
 ## Credits
 
-1. [Spectre.Console](https://spectreconsole.net/) - Spectre.Console is a .NET Standard 2.0 library that makes it easier
-   to create beautiful console applications.
-2. [MetroApps](https://mahapps.com/) - MahApps.Metro is a framework that allows developers to cobble together a Metro or
-   Modern UI for their own WPF applications with minimal effort.
-3. [HTMX](https://htmx.org) - htmx gives you access to AJAX, CSS Transitions, WebSockets and Server Sent Events directly
+1. [HTMX](https://htmx.org) - htmx gives you access to AJAX, CSS Transitions, WebSockets and Server Sent Events directly
    in HTML, using attributes, so you can build modern user interfaces with the simplicity and power of hypertext.
-4. [QuestPDF](https://github.com/QuestPDF/QuestPDF) - QuestPDF is an open-source .NET library for PDF documents
-   generation.
-5. [Mermaid.js](https://github.com/mermaid-js/mermaid) - generating dialogs from markdown files -
-   thanks [Adrian](https://github.com/snobu)
+2. [Bootstrap](https://getbootstrap.com) - Bootstrap is an open source toolkit for developing with HTML, CSS, and JS.
+
 
 # Contributing
 
