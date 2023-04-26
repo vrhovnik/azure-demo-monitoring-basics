@@ -20,6 +20,7 @@ builder.Services.AddRazorPages().AddRazorPagesOptions(options =>
 
 builder.Services.AddHealthChecks();
 builder.Services.AddApplicationInsightsTelemetry();
+builder.Services.AddServiceProfiler();
 
 var app = builder.Build();
 
