@@ -62,6 +62,13 @@ app.MapPost("/login", (ILogger<Program> logger, [FromBody] LoginData data) =>
     return Results.Unauthorized();
 });
 
+app.MapPost("/register", (ILogger<Program> logger, [FromBody] LoginData data) =>
+{
+    logger.LogInformation("Registering: Username {Username}, Password {Password}", data.Username,
+        data.Password);
+    return Results.Ok($"User {data.Username} has been successfully registered!");
+});
+
 app.Run();
 
 internal record LoginData(string Username, string Password);

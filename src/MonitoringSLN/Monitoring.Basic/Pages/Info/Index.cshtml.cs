@@ -11,8 +11,5 @@ public class IndexPageModel : PageModel
         this.logger = logger;
     }
 
-    public void OnGet()
-    {
-        logger.LogInformation("Loaded page at {DateLoaded}", DateTime.Now);
-    }
+    public void OnGet() => logger.LogInformation("Loaded page at {DateLoaded}", DateTime.Now);
 }

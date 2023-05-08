@@ -23,7 +23,7 @@ http://github.com/vrhovnik
 param(
     [Parameter(Mandatory = $false, HelpMessage = "Connection string to Application Insights")]
     $ConnectionString = "",
-    [Parameter(Mandatory = $false), HelpMessage = "Instrumentation key to Application Insights"]
+    [Parameter(Mandatory = $false, HelpMessage = "Instrumentation key to Application Insights")]
     $InstrumentationKey = ""
 )
 

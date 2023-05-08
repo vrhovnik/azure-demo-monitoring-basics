@@ -13,7 +13,7 @@ public class ActivityLogsPageModel : PageModel
 {
     private readonly ILogger<ActivityLogsPageModel> logger;
     private MonitoringOptions monitoringOptions;
-    
+
     public ActivityLogsPageModel(ILogger<ActivityLogsPageModel> logger,
         IOptions<MonitoringOptions> monitoringOptionsValue)
     {
@@ -24,12 +24,11 @@ public class ActivityLogsPageModel : PageModel
     public async Task OnGet()
     {
         logger.LogInformation("Loaded activity logs at {DateLoaded}", DateTime.Now);
-        
+
         var client = new LogsQueryClient(new DefaultAzureCredential());
         var response = await client.QueryWorkspaceAsync(
-           // monitoringOptions.WorkspaceId,
-           "b50e3aee-db8c-4317-b3d0-8f44b6e9f7f7",
-            "Perf | top 20 by TimeGenerated",
+            monitoringOptions.WorkspaceId,
+            "InsightsMetrics | top 20 by TimeGenerated",
             new QueryTimeRange(TimeSpan.FromDays(7)));
 
         var table = response.Value.Table;
@@ -39,10 +38,10 @@ public class ActivityLogsPageModel : PageModel
             list.Add(new PerfResultViewModel
             {
                 Computer = row["Computer"].ToString(),
-                ObjectName = row["ObjectName"].ToString(),
-                CounterName = row["CounterName"].ToString(),
-                CounterValue = row["CounterValue"].ToString()
-            });    
+                ObjectName = row["Namespace"].ToString(),
+                CounterName = row["Name"].ToString(),
+                CounterValue = row["Val"].ToString()
+            });
         }
 
         Result = list;

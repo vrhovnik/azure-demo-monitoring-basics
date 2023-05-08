@@ -1,4 +1,6 @@
-﻿using Azure;
+﻿using System.Runtime.Serialization.Formatters.Binary;
+using Azure;
+using Azure.Core.Serialization;
 using Azure.Identity;
 using Azure.Monitor.Query;
 using Azure.Monitor.Query.Models;
@@ -32,23 +34,27 @@ public class SearchPageModel : PageModel
 
         LogsBatchQuery batch = new();
         var queryResult = batch.AddWorkspaceQuery(
-            monitoringOptions.WorkspaceId,
-            monitoringOptions.StreamName,
-            new QueryTimeRange(TimeSpan.FromDays(1)));
+            // monitoringOptions.WorkspaceId,
+            "4ac7af67-2c10-4c17-b3d9-ee7bad1a4621",
+            "AdrianBojan_CL",
+            new QueryTimeRange(TimeSpan.FromDays(1)),
+            new LogsQueryOptions { IncludeStatistics = true });
 
         Response<LogsBatchQueryResultCollection> queryResponse =
             await logsQueryClient.QueryBatchAsync(batch).ConfigureAwait(false);
 
         var list = new List<CustomLogViewModel>();
-        foreach (var logsTableRow in queryResponse.Value.GetResult(queryResult).Table.Rows)
+        var data = queryResponse.Value.GetResult(queryResult);
+        foreach (var logsTableRow in data.Table.Rows)
         {
-            var lv = (CustomLogViewModel)logsTableRow["AdditionalContext"];
+            var addContext = logsTableRow["AdditionalContext"] as BinaryData;
+            var lv = addContext.ToObject<CustomLogViewModel>(new JsonObjectSerializer());
             list.Add(lv);
         }
 
+        Result = list;
         if (!Request.IsHtmx()) return Page();
 
-        Result = list;
         return Partial("_SearchResults", list);
     }
 

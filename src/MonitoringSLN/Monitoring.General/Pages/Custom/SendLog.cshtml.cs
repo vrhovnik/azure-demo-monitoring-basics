@@ -23,10 +23,7 @@ public class SendLogPageModel : PageModel
         this.logger = logger;
     }
 
-    public void OnGet()
-    {
-        logger.LogInformation("Loading page SendPageModel at {DateLoaded}", DateTime.Now);
-    }
+    public void OnGet() => logger.LogInformation("Loading page SendPageModel at {DateLoaded}", DateTime.Now);
 
     public async Task OnPost()
     {
