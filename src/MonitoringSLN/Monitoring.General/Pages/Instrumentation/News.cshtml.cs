@@ -56,7 +56,7 @@ public class NewsPageModel : PageModel
             Url = url,
             DatePublished = DateTime.Parse(datePublished)
         });
-        return RedirectToPage("/Info/Favorites");
+        return RedirectToPage("/Instrumentation/Favorites");
     }
 
     public List<NewsModel> News { get; set; } = new();
