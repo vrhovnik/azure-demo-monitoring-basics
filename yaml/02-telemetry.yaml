@@ -27,6 +27,12 @@ spec:
       containers:
         - name: web
           image: $REGISTRY$.azurecr.io/telemetry:latest
+          env:
+            - name: AzureMonitorConnectionString
+              valueFrom:
+                secretKeyRef:
+                  name: monitoring-telemetry-secret
+                  key: aiconnstring
           resources:
             requests:
               cpu: 100m

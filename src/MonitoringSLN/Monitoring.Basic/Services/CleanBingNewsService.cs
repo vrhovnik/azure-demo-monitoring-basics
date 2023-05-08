@@ -50,7 +50,7 @@ public class CleanBingNewsService : INewsService
         logger.LogInformation("Data received {Data}, preparing data", newsResult);
         var searchResponse =
             JsonConvert.DeserializeObject<Dictionary<string, object>>(newsResult);
-        
+
         var articles = searchResponse["news"] as Newtonsoft.Json.Linq.JToken;
         var bingNewsReponse = articles.ToObject<BingNewsResponse>();
         if (bingNewsReponse == null)
@@ -58,11 +58,12 @@ public class CleanBingNewsService : INewsService
             logger.LogTrace("Data was not returned, check values and keys");
             return list;
         }
+
         foreach (var currentArticle in bingNewsReponse.Results)
         {
             if (!DateTime.TryParse(currentArticle.DatePublished, out var datePublished))
-                datePublished= DateTime.Now;
-            
+                datePublished = DateTime.Now;
+
             var newsModel = new NewsModel
             {
                 Title = currentArticle.Name,
@@ -72,6 +73,7 @@ public class CleanBingNewsService : INewsService
             };
             list.Add(newsModel);
         }
+
         logger.LogInformation("Data prepared, checking language");
 
         async Task<string> TranslateTextAsync(string textToTranslate, Languages toLang)
@@ -94,7 +96,17 @@ public class CleanBingNewsService : INewsService
             // Send the request and get response.
             var response = await client.SendAsync(request).ConfigureAwait(false);
             var result = await response.Content.ReadAsStringAsync();
-            return result;
+
+            if (string.IsNullOrEmpty(result))
+            {
+                logger.LogInformation("No translation was returned");
+                return "";
+            }
+
+            var bingTranslateResponse = JsonConvert.DeserializeObject<BingTranslateResponse[]>(result);
+            return bingTranslateResponse[0].Translations.Length > 0
+                ? bingTranslateResponse[0].Translations[0].TranslatedText
+                : string.Empty;
         }
 
         if (language == Languages.English)

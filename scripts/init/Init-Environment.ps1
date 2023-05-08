@@ -109,11 +109,11 @@ $groupName = $groupNameExport.Outputs.rgName.Value
 Write-Verbose "The resource group name is $groupName"
 # deploy log analytics file if not already deployed
 New-AzResourceGroupDeployment -ResourceGroupName $groupName -TemplateFile "bicep\log-analytics.bicep" -TemplateParameterFile "bicep\log-analytics.parameters.json" -Verbose
-# deploy azure storage file if not already deployed
+## deploy azure storage file if not already deployed
 New-AzResourceGroupDeployment -ResourceGroupName $groupName -TemplateFile "bicep\storage.bicep" -TemplateParameterFile "bicep\storage.parameters.json" -Verbose
-# deploy azure registry file if not already deployed
+## deploy azure registry file if not already deployed
 New-AzResourceGroupDeployment -ResourceGroupName $groupName -TemplateFile "bicep\registry.bicep" -TemplateParameterFile "bicep\registry.parameters.json" -Verbose
-# deploy text translate cognitive service file if not already deployed
+## deploy text translate cognitive service file if not already deployed
 New-AzResourceGroupDeployment -ResourceGroupName $groupName -TemplateFile "bicep\cognitive-services-translate.bicep" -TemplateParameterFile "bicep\cognitive-services-translate.parameters.json" -Verbose
 # deploy SQL file if not already deployed
 $sqlValues = New-AzResourceGroupDeployment -ResourceGroupName $groupName -TemplateFile "bicep\sql.bicep" -TemplateParameterFile "bicep\sql.parameters.json" -Verbose
@@ -129,9 +129,9 @@ Write-Information "The database name is $dbName"
 $connString = "Server=tcp:$loginServer.database.windows.net,1433;Database=$dbName;User ID=$loginName;Password=$loginPass;Trusted_Connection=False;Encrypt=True;"
 Write-Information "The connection string is $connString"
 # deploy app service with web app if not already deployed
-New-AzResourceGroupDeployment -ResourceGroupName $groupName -TemplateFile "bicep\web.bicep" -TemplateParameterFile "bicep\web.parameters.json" -Verbose
+# New-AzResourceGroupDeployment -ResourceGroupName $groupName -TemplateFile "bicep\web.bicep" -TemplateParameterFile "bicep\web.parameters.json" -Verbose
 # deploy load testing if not already deployed
-New-AzResourceGroupDeployment -ResourceGroupName $groupName -TemplateFile "bicep\load-testing.bicep" -TemplateParameterFile "bicep\load-testing.parameters.json" -Verbose
+#New-AzResourceGroupDeployment -ResourceGroupName $groupName -TemplateFile "bicep\load-testing.bicep" -TemplateParameterFile "bicep\load-testing.parameters.json" -Verbose
 ##deploy aks to the resource group
 New-AzResourceGroupDeployment -ResourceGroupName $groupName -TemplateFile "bicep\aks.bicep" -TemplateParameterFile "bicep\aks.parameters.json" -Verbose
 $aks = Get-Content "bicep\aks.parameters.json" | ConvertFrom-Json

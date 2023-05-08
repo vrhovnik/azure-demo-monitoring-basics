@@ -1,0 +1,4 @@
+﻿exceptions
+| where isempty(client_Browser)
+| summarize sum(itemCount) by bin(timestamp, 5m)
+| render barchart

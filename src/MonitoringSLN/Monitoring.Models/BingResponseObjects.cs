@@ -1,7 +1,19 @@
-﻿using System.Text.Json.Serialization;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 
 namespace Monitoring.Models;
+
+public class BingTranslateResponse
+{
+    [JsonProperty(PropertyName = "translations")]
+    public Translations[] Translations { get; set; }
+}
+
+public class Translations
+{
+    [JsonProperty(PropertyName = "text")]
+    public string TranslatedText { get; set; }
+    public string to { get; set; }
+}
 
 public class BingNewsResponse
 {

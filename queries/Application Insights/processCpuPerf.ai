@@ -1,0 +1,5 @@
+﻿performanceCounters
+| where ((category == "Process" and counter == "% Processor Time Normalized") or name == "processCpuPercentage")
+| extend performanceCounter_value = iif(itemType == "performanceCounter", value, todouble(''))
+| summarize sum(performanceCounter_value) / count() by bin(timestamp, 1m)
+| render timechart

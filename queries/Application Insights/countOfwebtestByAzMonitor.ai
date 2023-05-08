@@ -1,0 +1,3 @@
+﻿availabilityResults
+| summarize sum(itemCount) by bin(timestamp, 5m)
+| render timechart

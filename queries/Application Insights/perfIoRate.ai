@@ -1,0 +1,5 @@
+﻿performanceCounters
+| where ((category == "Process" and counter == "IO Data Bytes/sec") or name == "processIOBytesPerSecond")
+| extend performanceCounter_value = iif(itemType == "performanceCounter", value, todouble(''))
+| summarize sum(performanceCounter_value) / count() by bin(timestamp, 1m)
+| render timechart

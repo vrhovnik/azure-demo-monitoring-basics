@@ -1,0 +1,15 @@
+﻿@page
+@model Monitoring.General.Pages.Instrumentation.TrackTracePageModel
+
+@{
+    ViewData["Title"] = "Track Trace";
+}
+
+<h2>Track trace</h2>
+<p>Press a button to call trace and then retrieve it via KQL in log Analytics</p>
+
+<form method="post">
+    <button class="btn btn-info">Click to send custom trace</button>
+</form>
+
+<p>Read it via KQL:</p>

@@ -1,0 +1,8 @@
+﻿dependencies
+| where notempty(duration)
+| extend dependency_duration = iif(itemType == 'dependency',duration,todouble(''))
+| extend _sum = dependency_duration
+| extend _count = itemCount
+| extend _sum = _sum*_count
+| summarize sum(_sum)/sum(_count) by bin(timestamp, 1m)
+| render timechart

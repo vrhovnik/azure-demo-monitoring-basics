@@ -1,0 +1,5 @@
+﻿performanceCounters
+| where ((category == "Memory" and counter == "Available Bytes") or name == "availableMemory")
+| extend performanceCounter_value = iif(itemType == "performanceCounter", value, todouble(''))
+| summarize sum(performanceCounter_value) / count() by bin(timestamp, 1m)
+| render timechart

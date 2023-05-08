@@ -1,0 +1,8 @@
+﻿requests
+| where notempty(duration)
+| extend request_duration = iif(itemType == 'request', duration, todouble(''))
+| extend _sum = request_duration
+| extend _count = itemCount
+| extend _sum = _sum*_count
+| summarize sum(_sum) / sum(_count) by bin(timestamp, 1m)
+| render timechart

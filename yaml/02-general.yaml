@@ -29,16 +29,16 @@ spec:
         - name: web
           image: $REGISTRY$.azurecr.io/general:latest
           env:
-            - name: AzureMonitorConnectionString
+            - name: ApplicationInsights__ConnectionString
               valueFrom:
                 secretKeyRef:
-                  name: ApplicationInsights__ConnectionString
+                  name: monitoring-general-secret
                   key: aiconnstring
-            - name: AzureSqlConnectionString
+            - name: SqlService__ConnectionString
               valueFrom:
                 secretKeyRef:
-                  name: SqlService__ConnectionString
-                  key: aiconnstring
+                  name: monitoring-general-secret
+                  key: sqlConn
           resources:
             requests:
               cpu: 100m

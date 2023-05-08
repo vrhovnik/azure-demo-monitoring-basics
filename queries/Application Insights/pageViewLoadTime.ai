@@ -1,0 +1,8 @@
+﻿pageViews
+| where notempty(duration)
+| extend pageView_duration = iif(itemType == 'pageView', duration, todouble(''))
+| extend _sum = pageView_duration
+| extend _count = itemCount
+| extend _sum = _sum * _count
+| summarize sum(_sum) / sum(_count) by bin(timestamp, 5m)
+| render barchart

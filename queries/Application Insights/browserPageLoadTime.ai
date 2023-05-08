@@ -1,0 +1,7 @@
+﻿browserTimings
+| where notempty(totalDuration)
+| extend _sum = totalDuration
+| extend _count = itemCount
+| extend _sum = _sum * _count
+| summarize sum(_sum) / sum(_count) by bin(timestamp, 5m)
+| render timechart

@@ -1,0 +1,43 @@
+﻿@page
+@model Monitoring.General.Pages.Instrumentation.SendMetricsPageModel
+
+@{
+    ViewData["Title"] = "Send metrics";
+}
+
+<h2>Send metrics</h2>
+
+<p>Press a button to send metrics (single, multi) and then retrieve it via KQL in log Analytics</p>
+
+@if (!string.IsNullOrEmpty(Model.Message))
+{
+    <div class="alert alert-success"
+         role="alert">
+        @Model.Message
+    </div>
+}
+
+<div class="col-12">
+    <form action="Simple"
+          method="post">
+        <button class="btn btn-info"
+                type="submit">
+            Send single metric
+        </button>
+    </form>
+</div>
+<div class="col-12">
+    <form action="Multi"
+          method="post">
+        <button class="btn btn-info"
+                type="submit">
+            Send multi metric
+        </button>
+    </form>
+</div>
+
+<hr class="m-3"/>
+
+<p>
+    <b>KQL</b>: customMetrics | where name == "EmailSent" | summarize avg(value) by bin(timestamp, 1h)
+</p>

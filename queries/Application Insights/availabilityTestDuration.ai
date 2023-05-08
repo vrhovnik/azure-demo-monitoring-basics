@@ -1,0 +1,5 @@
+﻿availabilityResults
+| where notempty(duration)
+| extend availabilityResult_duration = iif(itemType == 'availabilityResult', duration, todouble(''))
+| summarize sum(availabilityResult_duration)/sum(itemCount) by bin(timestamp, 5m), location
+| render timechart

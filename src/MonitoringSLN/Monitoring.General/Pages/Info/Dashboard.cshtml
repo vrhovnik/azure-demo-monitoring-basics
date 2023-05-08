@@ -67,4 +67,68 @@
             </div>
         </div>
     </div>
+    <div class="col mb-2">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">News (external) call</h5>
+                <h6 class="card-subtitle mb-2 text-muted">Calling Bing News Api as External</h6>
+                <p class="card-text">
+                    Doing dependency call to external service
+                </p>
+                <a asp-page="/Instrumentation/News"
+                   class="card-link">
+                    Go
+                    <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="col mb-2">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Favorites (sql) call</h5>
+                <h6 class="card-subtitle mb-2 text-muted">Calling sql database</h6>
+                <p class="card-text">
+                    Calling LocalDb or Azure SQL database
+                </p>
+                <a asp-page="/Instrumentation/Favorites"
+                   class="card-link">
+                    Go
+                    <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="col mb-2">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Send custom metrics</h5>
+                <h6 class="card-subtitle mb-2 text-muted">Send custom metrics to AI</h6>
+                <p class="card-text">
+                    Send one or multi dimensional metrics to AI
+                </p>
+                <a asp-page="/Instrumentation/SendMetrics"
+                   class="card-link">
+                    Go
+                    <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="col mb-2">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Send track dependency</h5>
+                <h6 class="card-subtitle mb-2 text-muted">Send custom dependency call to AI</h6>
+                <p class="card-text">
+                    Send custom dependency call to service to AI - call to <a asp-page="/Instrumentation/News">Bing News</a> to see in action
+                </p>
+                <a asp-page="/Instrumentation/TrackDependency"
+                   class="card-link">
+                    Go
+                    <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+        </div>
+    </div>
 </div>

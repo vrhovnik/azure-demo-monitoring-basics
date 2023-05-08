@@ -1,0 +1,52 @@
+﻿@page
+@model Monitoring.General.Pages.Instrumentation.TrackDependencyPageModel
+
+@{
+    ViewData["Title"] = "Track Dependency";
+}
+
+@if (!string.IsNullOrEmpty(Model.Message))
+{
+    <div class="alert alert-success"
+         role="alert">
+        @Model.Message
+    </div>
+}
+
+<h2>Track Dependency</h2>
+<p>Press a button to call dependency and then retrieve it via KQL in log Analytics</p>
+<form method="post">
+    <Button class="btn btn-info">Call dependency call - check out News as well</Button>
+</form>
+
+<p>
+    KQL query to retrieve dependency calls:
+</p>
+<ul>
+    <li>
+        Failed calls:
+        <br>
+        dependencies | where success != "True" | take 10
+    </li>
+    <li>
+        Ajax calls:
+        <br>
+        dependencies | where client_Type == "Browser" | take 10
+    </li>
+    <li>
+        Dependency calls associated with requests
+        <br>
+        dependencies
+        | where timestamp > ago(1d) and  client_Type != "Browser"
+        | join (requests | where timestamp > ago(1d))
+        on operation_Id
+    </li>
+    <li>
+        Ajax calls associated with page views:
+        <br>
+        dependencies
+            | where timestamp > ago(1d) and  client_Type == "Browser"
+            | join (browserTimings | where timestamp > ago(1d))
+              on operation_Id
+    </li>
+</ul>
