@@ -21,8 +21,7 @@ this [instructions](https://learn.microsoft.com/en-us/azure/aks/learn/quick-kube
 
 ## Application Insights
 
-Going
-through [Application Insights](https://learn.microsoft.com/en-us/azure/azure-monitor/app/app-insights-overview?tabs=net)
+Going through [Application Insights](https://learn.microsoft.com/en-us/azure/azure-monitor/app/app-insights-overview?tabs=net)
 solution with focus on practical areas:
 
 1. Usage in depth (insights, visualization, analyze, respond)
@@ -45,6 +44,7 @@ out [this official guidance](https://learn.microsoft.com/en-us/azure/azure-monit
 2. [Bootstrap](https://getbootstrap.com) - Bootstrap is an open source toolkit for developing with HTML, CSS, and JS.
 3. [Application Insights](https://learn.microsoft.com/en-us/azure/azure-monitor/app/app-insights-overview?tabs=net) -
    extension of Azure Monitor to provide APM (Application Performance Monitoring)
+4. [Access control](https://learn.microsoft.com/en-us/azure/azure-monitor/app/resources-roles-access-control#select-a-role) - how to define access control for Application Insights 
 
 # Contributing
 
