@@ -6,6 +6,7 @@ using Microsoft.ApplicationInsights.WindowsServer.TelemetryChannel;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.Identity.Web;
 using Microsoft.Identity.Web.UI;
+using Monitoring.General.Filters;
 using Monitoring.General.Options;
 using Monitoring.General.Services;
 using Monitoring.Interfaces;
@@ -64,16 +65,17 @@ builder.Services.ConfigureTelemetryModule<DependencyTrackingTelemetryModule>((mo
 });
 
 // The following removes all default counters from EventCounterCollectionModule, and adds a single one.
-builder.Services.ConfigureTelemetryModule<EventCounterCollectionModule>((module, o) =>
-{
-    module.Counters.Add(new EventCounterCollectionRequest("System.Runtime", "gen-0-size"));
-});
+// builder.Services.ConfigureTelemetryModule<EventCounterCollectionModule>((module, o) =>
+// {
+//     module.Counters.Add(new EventCounterCollectionRequest("System.Runtime", "gen-0-size"));
+// });
 
 builder.Services.AddHttpClient<INewsService, BingNewsService>();
 builder.Services.AddHealthChecks();
 builder.Services.AddServiceProfiler();
 builder.Services.AddApplicationInsightsTelemetry(aiOptions);
-
+//builder.Services.AddApplicationInsightsTelemetryProcessor<SuccessfulDependencyFilter>();
+//builder.Services.AddSingleton<ITelemetryInitializer, MyTelemetryInitializer>();
 var app = builder.Build();
 
 if (!app.Environment.IsDevelopment())
