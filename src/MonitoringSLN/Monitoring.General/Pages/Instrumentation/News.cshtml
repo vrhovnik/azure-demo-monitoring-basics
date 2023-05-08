@@ -1,0 +1,100 @@
+﻿@page "{query?}"
+@model Monitoring.General.Pages.Instrumentation.NewsPageModel
+
+
+@{
+    ViewData["Title"] = "News";
+}
+
+<h2>Search through news</h2>
+
+<form class="row g-3 align-items-center" method="get">
+    <div class="col-12">
+        <label for="searchQuery">
+            Query string
+        </label>
+        <input class="form-control"
+               id="searchQuery"
+               placeholder="Enter search query here"
+               type="text"
+               name="query"
+               value="@Model.Query">
+    </div>
+    <div class="col-12">
+        <select id="ddlLanguages"
+                name="ddlLanguages">
+            <option value="en">English</option>
+            <option value="sl">Slovenian</option>
+            <option value="pl">Polish</option>
+        </select>
+    </div>
+    <div class="col-12">
+        <button class="btn btn-primary"
+                type="submit">
+            Search
+        </button>
+    </div>
+</form>
+
+@if (Model.News.Any())
+{
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>
+                Title
+            </th>
+            <th>
+                Description
+            </th>
+            <th>
+                Publish date
+            </th>
+            <th>...</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var news in Model.News)
+        {
+            <form method="post">
+                <tr>
+                    <td>
+                        <input name="title"
+                               type="hidden"
+                               value="@news.Title" />
+                        <input name="url"
+                               type="hidden"
+                               value="@news.Url" />
+                        <a href="@news.Url"
+                           target="_blank">
+                            @news.Title
+                        </a>
+                    </td>
+                    <td>
+                        <input name="content"
+                               type="hidden"
+                               value="@news.Content" />
+                        @news.Content
+                    </td>
+                    <td>
+                        <input name="datePublished"
+                               type="hidden"
+                               value="@news.DatePublished" />
+                        @news.DatePublished
+                    </td>
+                    <td>
+                        <button class="border-0"
+                                type="submit">
+                            <i class="fa-solid fa-star"></i>
+                        </button>
+                    </td>
+                </tr>
+            </form>
+        }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>No news found, check query @Model.Query</p>
+}

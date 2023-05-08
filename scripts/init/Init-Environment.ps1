@@ -113,7 +113,26 @@ New-AzResourceGroupDeployment -ResourceGroupName $groupName -TemplateFile "bicep
 New-AzResourceGroupDeployment -ResourceGroupName $groupName -TemplateFile "bicep\storage.bicep" -TemplateParameterFile "bicep\storage.parameters.json" -Verbose
 # deploy azure registry file if not already deployed
 New-AzResourceGroupDeployment -ResourceGroupName $groupName -TemplateFile "bicep\registry.bicep" -TemplateParameterFile "bicep\registry.parameters.json" -Verbose
-#deploy aks to the resource group
+# deploy text translate cognitive service file if not already deployed
+New-AzResourceGroupDeployment -ResourceGroupName $groupName -TemplateFile "bicep\cognitive-services-translate.bicep" -TemplateParameterFile "bicep\cognitive-services-translate.parameters.json" -Verbose
+# deploy SQL file if not already deployed
+$sqlValues = New-AzResourceGroupDeployment -ResourceGroupName $groupName -TemplateFile "bicep\sql.bicep" -TemplateParameterFile "bicep\sql.parameters.json" -Verbose
+Write-Information $sqlValues
+$loginServer = $sqlValues.Outputs.loginServer.Value
+Write-Information "The login server is $loginServer"
+$loginName = $sqlValues.Outputs.loginName.Value
+Write-Information "The login name is $loginName"
+$loginPass = $sqlValues.Outputs.loginPass.Value
+Write-Information "The login password is $loginPass"
+$dbName = $sqlValues.Outputs.dbName.Value
+Write-Information "The database name is $dbName"
+$connString = "Server=tcp:$loginServer.database.windows.net,1433;Database=$dbName;User ID=$loginName;Password=$loginPass;Trusted_Connection=False;Encrypt=True;"
+Write-Information "The connection string is $connString"
+# deploy app service with web app if not already deployed
+New-AzResourceGroupDeployment -ResourceGroupName $groupName -TemplateFile "bicep\web.bicep" -TemplateParameterFile "bicep\web.parameters.json" -Verbose
+# deploy load testing if not already deployed
+New-AzResourceGroupDeployment -ResourceGroupName $groupName -TemplateFile "bicep\load-testing.bicep" -TemplateParameterFile "bicep\load-testing.parameters.json" -Verbose
+##deploy aks to the resource group
 New-AzResourceGroupDeployment -ResourceGroupName $groupName -TemplateFile "bicep\aks.bicep" -TemplateParameterFile "bicep\aks.parameters.json" -Verbose
 $aks = Get-Content "bicep\aks.parameters.json" | ConvertFrom-Json
 Write-Verbose "AKS parameters $aks"
@@ -131,15 +150,8 @@ $yamlSimple = Get-Content "yaml\02-simple.yaml" -Raw
 Write-Verbose "Yaml file is $yamlSimple"
 $yamlSimple = $yamlSimple.Replace('$REGISTRY$', $registryName)
 New-Item "yaml\02-simple-$registryName.yaml" -Force
-Set-Content -Path "yaml\02-simple-$registryName.yaml" -Value $yamlSimple
+Set-Content -Path "yaml\02-simple-$registryName.yaml" -Value $yamlSimple -Force
 Write-Verbose "Yaml simple has been updated"
-
-$yamlGeneral = Get-Content "yaml\02-general.yaml" -Raw
-Write-Verbose "Yaml file is $yamlGeneral"
-$yamlGeneral = $yamlGeneral.Replace('$REGISTRY$', $registryName)
-New-Item "yaml\02-general-$registryName.yaml" -Force
-Set-Content -Path "yaml\02-general-$registryName.yaml" -Value $yamlGeneral
-Write-Verbose "Yaml general has been updated"
 
 $yamlTelemetry = Get-Content "yaml\02-telemetry.yaml" -Raw
 Write-Verbose "Yaml file is $yamlTelemetry"
@@ -156,13 +168,24 @@ $aiKey = $details.Properties.InstrumentationKey
 Write-Verbose "AI key is $aiKey"
 
 $bytes = [System.Text.Encoding]::UTF8.GetBytes($aiKey)
-$encoded = [Convert]::ToBase64String($bytes)
-$yamlTelemetry = $yamlTelemetry.Replace('$AI_CONN_STRING$', $encoded)
+$aiEncoded = [Convert]::ToBase64String($bytes)
+$yamlTelemetry = $yamlTelemetry.Replace('$AI_CONN_STRING$', $aiEncoded)
 
 New-Item "yaml\02-telemetry-$registryName.yaml" -Force
-Set-Content -Path "yaml\02-telemetry-$registryName.yaml" -Value $yamlTelemetry
+Set-Content -Path "yaml\02-telemetry-$registryName.yaml" -Value $yamlTelemetry -Force
 Write-Verbose "Yaml telemetry has been updated"
- 
+
+$yamlGeneral = Get-Content "yaml\02-general.yaml" -Raw
+Write-Verbose "Yaml file is $yamlGeneral"
+$yamlGeneral = $yamlGeneral.Replace('$REGISTRY$', $registryName)
+$bytes = [System.Text.Encoding]::UTF8.GetBytes($connString)
+$sqlConnStringEncoded = [Convert]::ToBase64String($bytes)
+$yamlGeneral = $yamlGeneral.Replace('$SQL_CONN_STRING$', $sqlConnStringEncoded)
+$yamlGeneral = $yamlGeneral.Replace('$AI_CONN_STRING$', $aiEncoded)
+New-Item "yaml\02-general-$registryName.yaml" -Force
+Set-Content -Path "yaml\02-general-$registryName.yaml" -Value $yamlGeneral -Force
+Write-Verbose "Yaml general has been updated"
+
 # get azure cluster credentials
 Import-AzAksCredential -ResourceGroupName $groupName -Name $aksName -PassThru -Confirm:$false -Verbose 
 
@@ -175,8 +198,6 @@ kubectl apply -f "yaml/02-telemetry-$registryName.yaml"
 Write-Output "Credentials to access cluster $aksName in resource group $groupName are imported. Deploying VM."
 # deploy azure VM
 New-AzResourceGroupDeployment -ResourceGroupName $groupName -TemplateFile "bicep\vm.bicep" -TemplateParameterFile "bicep\vm.parameters.json" -Verbose
-##deploy load testing
-New-AzResourceGroupDeployment -ResourceGroupName $groupName -TemplateFile "bicep\load-testing.bicep" -TemplateParameterFile "bicep\load-testing.parameters.json" -Verbose
 
 Stop-Transcript
 

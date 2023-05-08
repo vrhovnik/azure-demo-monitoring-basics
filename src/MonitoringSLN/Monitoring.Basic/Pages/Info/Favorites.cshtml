@@ -1,0 +1,49 @@
+﻿@page
+@model Monitoring.Basic.Pages.FavoritesPageModel
+
+@{
+    ViewData["Title"] = "Favorites";
+}
+
+<h2>Favorites</h2>
+
+@if (Model.News.Any())
+{
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>
+                Title
+            </th>
+            <th>
+                Description
+            </th>
+            <th>
+                Publish date
+            </th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var news in Model.News)
+        {
+            <tr>
+                <td>
+                    <a href="@news.Url" target="_blank">
+                        @news.Title    
+                    </a>
+                </td>
+                <td>
+                    @news.Content
+                </td>
+                <td>
+                    @news.DatePublished
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>   
+}
+else
+{
+    <p>No favorites found!</p>
+}

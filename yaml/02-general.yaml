@@ -1,4 +1,14 @@
-﻿apiVersion: apps/v1
+﻿apiVersion: v1
+kind: Secret
+metadata:
+  name: monitoring-general-secret
+  namespace: monitoring
+type: Opaque
+data:
+  aiconnstring: $AI_CONN_STRING$
+  sqlConn: $SQL_CONN_STRING$
+---
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: monitoring-general
@@ -17,7 +27,18 @@ spec:
         "kubernetes.io/os": linux
       containers:
         - name: web
-          image: $REGISTRY$.azurecr.io/general:latest          
+          image: $REGISTRY$.azurecr.io/general:latest
+          env:
+            - name: AzureMonitorConnectionString
+              valueFrom:
+                secretKeyRef:
+                  name: ApplicationInsights__ConnectionString
+                  key: aiconnstring
+            - name: AzureSqlConnectionString
+              valueFrom:
+                secretKeyRef:
+                  name: SqlService__ConnectionString
+                  key: aiconnstring
           resources:
             requests:
               cpu: 100m

@@ -6,10 +6,10 @@
       "value": "dataitssqlserver"
     },
     "sqlDBName": {
-      "value": "ITSDB"
+      "value": "MonitoringDb"
     },
     "administratorLogin": {
-      "value": "itsuser"
+      "value": "monitoringuser"
     },
     "administratorLoginPassword": {
       "value": "Th1sIsMyLongPass1!!"

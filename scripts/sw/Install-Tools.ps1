@@ -99,7 +99,7 @@ Enable-WindowsOptionalFeature -Online -FeatureName IIS-HttpCompressionStatic
 Enable-WindowsOptionalFeature -Online -FeatureName IIS-ASPNET45
 
 Write-Host "Getting source code and storing it to $HOME/amaw"
-$zipPath="https://codeload.github.com/vrhovnik/azure-demo-monitoring-basics/zip/refs/heads/main"
+$zipPath="https://github.com/vrhovnik/azure-demo-monitoring-basics/archive/refs/heads/application-insight.zip"
 Set-Location $HOME
 Invoke-WebRequest -Uri $zipPath -OutFile "$HOME\amaw.zip"
 #extract to amaw folder

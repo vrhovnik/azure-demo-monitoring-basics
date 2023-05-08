@@ -1,10 +1,15 @@
 ﻿FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 
 COPY ["src/MonitoringSLN/Monitoring.Basic/", "Monitoring.Basic/"]
+COPY ["src/MonitoringSLN/Monitoring.Models/", "Monitoring.Models/"]
+COPY ["src/MonitoringSLN/Monitoring.Interfaces/", "Monitoring.Interfaces/"]
+RUN dotnet restore "Monitoring.Models/Monitoring.Models.csproj"
+RUN dotnet restore "Monitoring.Interfaces/Monitoring.Interfaces.csproj"
 RUN dotnet restore "Monitoring.Basic/Monitoring.Basic.csproj"
 
 COPY . .
-
+RUN dotnet build "Monitoring.Models/Monitoring.Models.csproj" -c Release -o /Monitoring.Basic
+RUN dotnet build "Monitoring.Interfaces/Monitoring.Interfaces.csproj" -c Release -o /Monitoring.Basic
 RUN dotnet build "Monitoring.Basic/Monitoring.Basic.csproj" -c Release -o /app
 
 FROM build AS publish
