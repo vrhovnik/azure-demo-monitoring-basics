@@ -1,0 +1,9 @@
+﻿requests
+| where timestamp > ago(7d) 
+| extend responseTimeInSeconds = duration / 1s
+| summarize avgResponseTime = avg(responseTimeInSeconds), stdevResponseTime = stdev(responseTimeInSeconds) by bin(timestamp, 1h) 
+| where stdevResponseTime > 0 
+| join kind=inner (requests | where timestamp > ago(7d) | extend responseTimeInSeconds = duration / 1s) on $left.timestamp == $right.timestamp
+| where (responseTimeInSeconds - avgResponseTime) > (3 * stdevResponseTime)
+| project outlierTimestamp=timestamp, outlierResponseTime=responseTimeInSeconds, operation_Name, operation_Id
+| order by outlierTimestamp asc

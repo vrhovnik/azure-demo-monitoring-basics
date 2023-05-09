@@ -13,9 +13,9 @@ using Monitoring.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddOptions<AzureAdOptions>().Bind(builder.Configuration.GetSection("AzureAd"))
-    .ValidateDataAnnotations()
-    .ValidateOnStart();
+builder.Services.AddOptions<AzureAdOptions>().Bind(builder.Configuration.GetSection("AzureAd"));
+    // .ValidateDataAnnotations()
+    // .ValidateOnStart();
 builder.Services.AddOptions<MonitoringOptions>().Bind(builder.Configuration.GetSection("Monitoring"));
 builder.Services.AddOptions<BingServiceOptions>().Bind(builder.Configuration.GetSection("BingService"));
 builder.Services.AddOptions<SqlOptions>().Bind(builder.Configuration.GetSection("SqlService"))
