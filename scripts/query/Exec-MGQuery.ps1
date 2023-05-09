@@ -26,7 +26,7 @@ param(
 
 Write-Verbose "Query name: $QueryName"
 
-$file = "queries\$QueryName.query"
+$file = "queries\Graph\$QueryName.query"
 Write-Verbose "File: $file"
 if (-not (Test-Path $file))
 {

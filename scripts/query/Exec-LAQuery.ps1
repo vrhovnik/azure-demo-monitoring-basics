@@ -30,7 +30,7 @@ param(
 
 Write-Verbose "Query name: $QueryName"
 
-$file = "queries\$QueryName.query"
+$file = ".\queries\General\$QueryName.query"
 Write-Verbose "File: $file"
 if (-not (Test-Path $file))
 {
@@ -53,7 +53,7 @@ if ($ResourceGroupName -eq "")
     return
 }
 
-$Workspace = Get-AzOperationalInsightsWorkspace -ResourceGroupName $ResourceGroupName -Name $WorkspaceName
+$Workspace = Get-AzOperationalInsightsWorkspace -ResourceGroupName $ResourceGroupName -Name $LogAnalyticsWorkspaceName
 Write-Verbose "Getting workspace $WorkspaceName in resource group $ResourceGroupName"
 $QueryResults = Invoke-AzOperationalInsightsQuery -Workspace $Workspace -Query $query | Select-Object -ExpandProperty Results
 Write-Output "Query results: "
