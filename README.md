@@ -4,6 +4,8 @@ The instructions about how the [demos](https://github.com/vrhovnik/azure-demo-mo
 and how to run them with step by step instructions is
 available [here](https://github.com/vrhovnik/azure-demo-monitoring-basics/blob/main/README.md).
 
+![App insights overview](https://learn.microsoft.com/en-us/azure/azure-monitor/app/media/overview-dashboard/0001-dashboard.png#lightbox)
+
 ## Pre-requisites
 
 If you didn't prepared the environment to follow along, you can run the following script in your PWSH terminal:
@@ -45,6 +47,17 @@ out [this official guidance](https://learn.microsoft.com/en-us/azure/azure-monit
 3. [Application Insights](https://learn.microsoft.com/en-us/azure/azure-monitor/app/app-insights-overview?tabs=net) -
    extension of Azure Monitor to provide APM (Application Performance Monitoring)
 4. [Access control](https://learn.microsoft.com/en-us/azure/azure-monitor/app/resources-roles-access-control#select-a-role) - how to define access control for Application Insights 
+
+## Useful links to check out
+
+1. [Automatically tracked dependencies](https://learn.microsoft.com/en-us/azure/azure-monitor/app/asp-net-dependencies#automatically-tracked-dependencies)
+2. [Standard metrics](https://learn.microsoft.com/en-us/azure/azure-monitor/app/standard-metrics)
+3. [Custom events limit](https://learn.microsoft.com/en-us/azure/azure-monitor/app/api-custom-events-metrics#limits)
+4. [App insights data model](https://learn.microsoft.com/en-us/azure/azure-monitor/app/data-model-complete)
+5. [Connection string](https://learn.microsoft.com/en-us/azure/azure-monitor/app/sdk-connection-string?tabs=dotnet5)
+6. [Types of sampling](https://learn.microsoft.com/en-us/azure/azure-monitor/app/sampling?tabs=net-core-new#types-of-sampling)
+7. [Workshop step by step](https://azuredevopslabs.com/labs/azuredevops/appinsights/)
+
 
 # Contributing
 

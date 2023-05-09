@@ -1,11 +1,14 @@
 // demo is authored by https://www.twilio.com/blog/export-logs-to-azure-monitor-with-opentelemetry-and-dotnet
 // and modified to use as an examples for 
+
+using System.Diagnostics;
 using System.Runtime.InteropServices;
 using Azure.Monitor.OpenTelemetry.Exporter;
 using Microsoft.AspNetCore.Mvc;
 using Monitoring.OpenTelemetryExport;
 using OpenTelemetry.Logs;
 using OpenTelemetry.Resources;
+using OpenTelemetry.Trace;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -34,6 +37,7 @@ builder.Logging.ClearProviders()
             .SetResourceBuilder(resourceBuilder)
             // add custom processor
             .AddProcessor(new CustomLogProcessor())
+            //.AddProcessor(new ActivityFilteringProcessor())
             // send logs to Azure Monitor
             .AddAzureMonitorLogExporter(options => options.ConnectionString = azmConnectionString)
             // send logs to the console using exporter
@@ -45,7 +49,8 @@ builder.Logging.ClearProviders()
     });
 
 builder.Services.AddHealthChecks();
-
+//offline storage
+//https://learn.microsoft.com/en-us/azure/azure-monitor/app/opentelemetry-configuration?tabs=net#offline-storage-and-automatic-retries
 var app = builder.Build();
 
 app.MapGet("/", (ILogger<Program> logger) =>
@@ -69,6 +74,27 @@ app.MapPost("/register", (ILogger<Program> logger, [FromBody] LoginData data) =>
     return Results.Ok($"User {data.Username} has been successfully registered!");
 });
 
+app.MapPost("/ex", (ILogger<Program> logger) =>
+{
+    var activitySource = new ActivitySource("MonitorActivitiy");
+    using (var activity = activitySource.StartActivity("ExceptionExample"))
+    {
+        try
+        {
+            throw new Exception("Test exception");
+        }
+        catch (Exception ex)
+        {
+            activity?.SetStatus(ActivityStatusCode.Error);
+            activity?.RecordException(ex);
+        }
+    }
+    return Results.Ok("Exception has been successfully registered!");
+});
+
 app.Run();
+
+//current state within Azure Monitor OpenTelemetry distro
+//https://learn.microsoft.com/en-us/azure/azure-monitor/faq#what-s-the-current-release-state-of-features-within-the-azure-monitor-opentelemetry-distro-
 
 internal record LoginData(string Username, string Password);
